@@ -1,53 +1,4428 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" dir="ltr">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flow Agent</title>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml"
+        href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="%230D1F2D"/><line x1="16" y1="4" x2="16" y2="8" stroke="%232EC5A0" stroke-width="2" stroke-linecap="round"/><circle cx="16" cy="3" r="1.5" fill="%232EC5A0"/><rect x="6" y="9" width="20" height="16" rx="4" fill="none" stroke="%232EC5A0" stroke-width="2"/><circle cx="12" cy="16" r="2.5" fill="%23DFCA98"/><circle cx="20" cy="16" r="2.5" fill="%23DFCA98"/><circle cx="12.8" cy="15.2" r=".7" fill="white" opacity=".7"/><circle cx="20.8" cy="15.2" r=".7" fill="white" opacity=".7"/><rect x="11" y="20" width="10" height="2" rx="1" fill="%232EC5A0" opacity=".8"/></svg>'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Flow Agent — Agente de IA para automações com n8n</title>
+    <meta name="description"
+        content="Flow Agent é um Agente de IA construído com n8n que automatiza o atendimento WhatsApp de forma humanizada, agenda e fideliza clientes de clínicas de estética, salões e barbearias premium. Entregue totalmente configurado." />
+    <meta name="keywords"
+        content="agente ia whatsapp, automação n8n, chatbot clínica estética, automação salão beleza, ia barbearia, atendimento humanizado ia, chatbot agendamento" />
+    <meta name="author" content="Flow Agent" />
+    <link rel="canonical" href="https://flowagent.app/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://flowagent.app/" />
+    <meta property="og:title" content="Flow Agent — Agente de IA para automações com n8n" />
+    <meta property="og:description"
+        content="Agente de IA humanizado que atende, agenda e fideliza clientes da sua clínica ou salão via WhatsApp — 24 horas, 7 dias, totalmente automatizado." />
+    <meta property="og:image" content="https://flowagent.app/og-image.jpg" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="Flow Agent" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Flow Agent — Agente de IA para automações com n8n" />
+    <meta name="twitter:description"
+        content="Atendimento 24/7 via WhatsApp com IA humanizada — entregue configurado e pronto para usar." />
+    <meta name="robots" content="index, follow" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap"
+        rel="stylesheet" />
+
     <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            /* Garante que o fundo ocupe toda a altura da tela */
-            /* background: linear-gradient(#4e54c8, #8f94fb); */
-            background-color: #111827;
-            /* O degradê acontece aqui */
+        /* ============================================================
+   TOKENS
+   ============================================================ */
+        :root {
+            --bg-0: #07080F;
+            --bg-1: #0D1020;
+            --bg-2: #121729;
+            --card: #171E31;
+            --card-hi: #1D2538;
+            --gold: #C8A86A;
+            --gold-lt: #DFCA98;
+            --gold-bg: rgba(200, 168, 106, .07);
+            --gold-br: rgba(200, 168, 106, .16);
+            --teal: #2EC5A0;
+            --teal-bg: rgba(46, 197, 160, .07);
+            --teal-br: rgba(46, 197, 160, .18);
+            --red-s: rgba(220, 70, 70, .07);
+            --red-br: rgba(220, 70, 70, .14);
+            --t1: #EBE9E2;
+            --t2: #8890A6;
+            --t3: #444B62;
+            --bdr: rgba(255, 255, 255, .065);
+            --bdr-hi: rgba(255, 255, 255, .12);
+            --r-lg: 18px;
+            --r-md: 12px;
+            --r-sm: 8px;
+            --max: 1320px;
+            --fh: \'Syne\', system-ui, sans-serif;
+            --fb: \'Plus Jakarta Sans\', system-ui, sans-serif;
+            --sh-card: 0 1px 0 rgba(255, 255, 255, .04) inset, 0 8px 48px rgba(0, 0, 0, .45);
+            --sh-gold: 0 4px 32px rgba(200, 168, 106, .22);
         }
 
-        .container {
-            width: 100%;
+        /* ============================================================
+   RESET
+   ============================================================ */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--fb);
+            background: var(--bg-0);
+            color: var(--t1);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        img,
+        svg {
+            display: block;
+            max-width: 100%;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            font-family: var(--fb);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* ============================================================
+   LAYOUT
+   ============================================================ */
+        .wrap {
+            max-width: var(--max);
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: 108px 0;
+        }
+
+        .s-label {
+            display: inline-block;
+            font-family: var(--fb);
+            font-size: .7rem;
+            font-weight: 700;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        h2.s-title {
+            font-family: var(--fh);
+            font-size: clamp(1.85rem, 3.2vw, 2.65rem);
+            font-weight: 700;
+            line-height: 1.18;
+            color: var(--t1);
+            margin-bottom: 1.1rem;
+        }
+
+        p.s-sub {
+            font-size: .975rem;
+            color: var(--t2);
+            line-height: 1.85;
+            max-width: 540px;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1)
+            }
+
+            50% {
+                opacity: .3;
+                transform: scale(.65)
+            }
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(110px);
+            z-index: 0;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity .6s ease, transform .6s ease;
+        }
+
+        .reveal.d1 {
+            transition-delay: .1s;
+        }
+
+        .reveal.d2 {
+            transition-delay: .18s;
+        }
+
+        .reveal.d3 {
+            transition-delay: .26s;
+        }
+
+        .reveal.in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ============================================================
+   BUTTONS
+   ============================================================ */
+        .btn-gold {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            background: var(--gold);
+            color: #07080F;
+            font-family: var(--fb);
+            font-weight: 700;
+            font-size: .9rem;
+            border-radius: var(--r-sm);
+            border: none;
+            transition: background .2s, transform .15s, box-shadow .2s;
+            box-shadow: var(--sh-gold);
+            text-decoration: none;
+        }
+
+        .btn-gold:hover {
+            background: var(--gold-lt);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px rgba(200, 168, 106, .32);
+        }
+
+        .btn-ghost {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 22px;
+            background: transparent;
+            color: var(--t2);
+            font-family: var(--fb);
+            font-weight: 500;
+            font-size: .9rem;
+            border: 1px solid var(--bdr);
+            border-radius: var(--r-sm);
+            transition: border-color .2s, color .2s;
+            text-decoration: none;
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--gold-br);
+            color: var(--t1);
+        }
+
+        .btn-outline-gold {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: transparent;
+            color: var(--gold);
+            font-family: var(--fb);
+            font-weight: 600;
+            font-size: .875rem;
+            border: 1px solid var(--gold-br);
+            border-radius: var(--r-sm);
+            transition: background .2s;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .btn-outline-gold:hover {
+            background: var(--gold-bg);
+        }
+
+        .arrow-icon {
+            width: 14px;
+            height: 14px;
+            flex-shrink: 0;
+            transition: transform .2s;
+        }
+
+        .btn-gold:hover .arrow-icon,
+        .btn-ghost:hover .arrow-icon {
+            transform: translateX(3px);
+        }
+
+        /* ============================================================
+   LANG TOGGLE
+   ============================================================ */
+        .lang-toggle {
+            display: flex;
+            background: var(--card);
+            border: 1px solid var(--bdr);
+            border-radius: 999px;
+            padding: 3px;
+        }
+
+        .lang-btn {
+            font-family: var(--fb);
+            font-size: .68rem;
+            font-weight: 700;
+            color: var(--t3);
+            background: none;
+            border: none;
+            padding: 4px 11px;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all .2s;
+        }
+
+        .lang-btn.active {
+            background: var(--gold);
+            color: #07080F;
+        }
+
+        /* ============================================================
+   MOBILE NAV
+   ============================================================ */
+        .mobile-nav {
+            position: fixed;
+            inset: 0;
+            background: rgba(7, 8, 15, .97);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 998;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            padding: 1.5rem 2rem 3rem;
+            transform: translateX(100%);
+            transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+            overflow-y: auto;
+        }
+
+        .mobile-nav.open {
+            transform: translateX(0);
+        }
+
+        .mn-header {
+            display: flex;
             align-items: center;
-            /* background-color: #f5f5f5; */
+            justify-content: space-between;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--bdr);
+            margin-bottom: 2rem;
         }
 
-        h1 {
-            color: #fff;
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin: 10px 0;
-            text-align: center;
+        .mn-close {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 1px solid var(--bdr);
+            background: transparent;
+            color: var(--t2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .2s;
         }
 
-        p {
-            color: #fff;
-            font-size: 1.5rem;
+        .mn-close:hover {
+            border-color: var(--bdr-hi);
+            color: var(--t1);
+        }
+
+        .mn-links {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .mn-links a {
+            font-family: var(--fh);
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--t2);
+            padding: .85rem 0;
+            border-bottom: 1px solid var(--bdr);
+            transition: color .2s;
+        }
+
+        .mn-links a:hover {
+            color: var(--t1);
+        }
+
+        .mn-cta {
+            margin-top: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mn-cta .btn-gold,
+        .mn-cta .btn-ghost {
+            justify-content: center;
+        }
+
+        .mn-lang {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* ============================================================
+   HEADER / NAV
+   ============================================================ */
+        #header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 900;
+            padding: 18px 0;
+            transition: background .35s, border-color .35s, padding .3s;
+            border-bottom: 1px solid transparent;
+        }
+
+        #header.scrolled {
+            background: rgba(7, 8, 15, .9);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom-color: var(--bdr);
+            padding: 12px 0;
+        }
+
+        .nav-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--fh);
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--t1);
+            white-space: nowrap;
+            letter-spacing: -.01em;
+        }
+
+        .logo-grad {
+            background: linear-gradient(120deg, var(--teal) 0%, var(--gold-lt) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-mark {
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            background: linear-gradient(145deg, #0D1F2D 0%, #07080F 100%);
+            border: 1px solid rgba(46, 197, 160, .35);
+            box-shadow: 0 0 0 1px rgba(46, 197, 160, .08), 0 2px 12px rgba(46, 197, 160, .18), inset 0 1px 0 rgba(255, 255, 255, .07);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-mark::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(46, 197, 160, .12) 0%, transparent 60%);
+        }
+
+        .logo-mark svg {
+            width: 20px;
+            height: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            font-size: .875rem;
             font-weight: 500;
-            margin: 10px 0;
+            color: var(--t2);
+            transition: color .2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--t1);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+        }
+
+        .btn-nav {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 20px;
+            background: var(--gold);
+            color: #07080F;
+            font-family: var(--fb);
+            font-weight: 700;
+            font-size: .825rem;
+            border-radius: var(--r-sm);
+            border: none;
+            transition: background .2s, transform .15s;
+        }
+
+        .btn-nav:hover {
+            background: var(--gold-lt);
+            transform: translateY(-1px);
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: 1px solid var(--bdr);
+            border-radius: var(--r-sm);
+            width: 38px;
+            height: 38px;
+            align-items: center;
+            justify-content: center;
+            color: var(--t2);
+            transition: all .2s;
+        }
+
+        .hamburger:hover {
+            border-color: var(--bdr-hi);
+            color: var(--t1);
+        }
+
+        /* ============================================================
+   HERO
+   ============================================================ */
+        #hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 130px 0 90px;
+            overflow: hidden;
+        }
+
+        #hero .orb-1 {
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(46, 197, 160, .11) 0%, transparent 65%);
+            top: -240px;
+            right: -220px;
+        }
+
+        #hero .orb-2 {
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(200, 168, 106, .08) 0%, transparent 65%);
+            bottom: -160px;
+            left: -160px;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            font-size: .72rem;
+            font-weight: 600;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--t2);
+            padding: 6px 14px;
+            border: 1px solid var(--gold-br);
+            border-radius: 999px;
+            background: var(--gold-bg);
+            margin-bottom: 1.75rem;
+        }
+
+        .eyebrow-dot {
+            width: 7px;
+            height: 7px;
+            background: var(--teal);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--teal);
+            animation: blink 2s ease-in-out infinite;
+        }
+
+        h1.hero-h1 {
+            font-family: var(--fh);
+            font-size: clamp(1.9rem, 3.6vw, 3rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -.02em;
+            color: var(--t1);
+            margin-bottom: 1.1rem;
+        }
+
+        h1.hero-h1 .gold {
+            color: var(--gold);
+        }
+
+        .hero-slogan {
+            font-size: clamp(.88rem, 1.4vw, 1.05rem);
+            color: var(--gold-lt);
+            font-weight: 400;
+            letter-spacing: .02em;
+            margin-bottom: 1.35rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero-slogan::before {
+            content: \'\';
+            display: block;
+            width: 24px;
+            height: 1px;
+            background: var(--gold);
+            flex-shrink: 0;
+        }
+
+        .hero-sub {
+            font-size: .975rem;
+            color: var(--t2);
+            line-height: 1.85;
+            max-width: 540px;
+            margin-bottom: 2.1rem;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: .85rem;
+            flex-wrap: wrap;
+            margin-bottom: 2.75rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 2.25rem;
+            padding-top: 2.25rem;
+            border-top: 1px solid var(--bdr);
+            flex-wrap: wrap;
+        }
+
+        .stat-num {
+            font-family: var(--fb);
+            font-size: 1.7rem;
+            font-weight: 700;
+            line-height: 1;
+            color: var(--t1);
+            margin-bottom: .3rem;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .stat-num .gold {
+            color: var(--gold);
+        }
+
+        .stat-label {
+            font-size: .7rem;
+            color: var(--t3);
+            line-height: 1.5;
+            letter-spacing: .03em;
+        }
+
+        /* ============================================================
+   HERO CHAT MOCKUP
+   ============================================================ */
+        .hero-visual {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-visual-glow {
+            position: absolute;
+            inset: -40px;
+            background: radial-gradient(circle at 50% 50%, rgba(46, 197, 160, .07) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .dash-mock {
+            background: var(--card);
+            border: 1px solid var(--bdr);
+            border-radius: var(--r-lg);
+            overflow: hidden;
+            box-shadow: var(--sh-card), 0 0 0 1px rgba(255, 255, 255, .04);
+            position: relative;
+            z-index: 1;
+            animation: floatDash 5s ease-in-out infinite;
+        }
+
+        @keyframes floatDash {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(-.3deg)
+            }
+
+            50% {
+                transform: translateY(-10px) rotate(.3deg)
+            }
+        }
+
+        .dm-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 14px;
+            background: var(--bg-2);
+            border-bottom: 1px solid var(--bdr);
+        }
+
+        .dm-dots {
+            display: flex;
+            gap: 5px;
+        }
+
+        .dm-dots span {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+        }
+
+        .dm-dots span:nth-child(1) {
+            background: #FF5F56
+        }
+
+        .dm-dots span:nth-child(2) {
+            background: #FFBD2E
+        }
+
+        .dm-dots span:nth-child(3) {
+            background: #27C93F
+        }
+
+        .dm-title {
+            flex: 1;
             text-align: center;
+            font-size: .65rem;
+            color: var(--t3);
+            letter-spacing: .04em;
+            font-family: var(--fb);
+        }
+
+        .dm-live {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: .62rem;
+            color: var(--teal);
+            font-weight: 600;
+            font-family: var(--fb);
+        }
+
+        .dm-live-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--teal);
+            border-radius: 50%;
+            box-shadow: 0 0 6px var(--teal);
+            animation: blink 1.5s ease-in-out infinite;
+        }
+
+        .dm-chat-hdr {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 9px 12px;
+            background: rgba(13, 16, 32, .6);
+            border-bottom: 1px solid var(--bdr);
+        }
+
+        .dm-contact-av {
+            width: 27px;
+            height: 27px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--teal), #1AA880);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .56rem;
+            font-weight: 700;
+            color: #07080F;
+            font-family: var(--fb);
+            flex-shrink: 0;
+        }
+
+        .dm-contact-name {
+            font-size: .66rem;
+            color: var(--t1);
+            font-weight: 600;
+            font-family: var(--fb);
+        }
+
+        .dm-contact-online {
+            font-size: .54rem;
+            color: var(--teal);
+            font-family: var(--fb);
+        }
+
+        .dm-msgs {
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .dm-msg {
+            display: flex;
+            flex-direction: column;
+            max-width: 78%;
+        }
+
+        .dm-msg.in {
+            align-self: flex-start;
+        }
+
+        .dm-msg.out {
+            align-self: flex-end;
+        }
+
+        .dm-bubble {
+            padding: 7px 11px;
+            border-radius: 11px;
+            font-size: .62rem;
+            line-height: 1.55;
+            font-family: var(--fb);
+        }
+
+        .dm-msg.in .dm-bubble {
+            background: var(--bg-2);
+            color: var(--t1);
+            border: 1px solid var(--bdr);
+            border-bottom-left-radius: 3px;
+        }
+
+        .dm-msg.out .dm-bubble {
+            background: rgba(46, 197, 160, .13);
+            color: var(--t1);
+            border: 1px solid rgba(46, 197, 160, .2);
+            border-bottom-right-radius: 3px;
+        }
+
+        .dm-time {
+            font-size: .5rem;
+            color: var(--t3);
+            margin-top: 2px;
+            font-family: var(--fb);
+        }
+
+        .dm-msg.out .dm-time {
+            align-self: flex-end;
+        }
+
+        .dm-flow-tags {
+            display: flex;
+            gap: 5px;
+            padding: 8px 12px;
+            flex-wrap: wrap;
+            border-top: 1px solid var(--bdr);
+            background: rgba(7, 8, 15, .4);
+        }
+
+        .dm-ftag {
+            font-size: .56rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 999px;
+            font-family: var(--fb);
+            background: var(--teal-bg);
+            color: var(--teal);
+            border: 1px solid var(--teal-br);
+        }
+
+        .dm-ftag.gold {
+            background: var(--gold-bg);
+            color: var(--gold);
+            border-color: var(--gold-br);
+        }
+
+        .dm-mini {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            padding: 8px 12px;
+            border-top: 1px solid var(--bdr);
+        }
+
+        .dmm {
+            background: var(--bg-2);
+            border: 1px solid var(--bdr);
+            border-radius: var(--r-sm);
+            padding: 6px;
+            text-align: center;
+        }
+
+        .dmm-v {
+            font-family: var(--fb);
+            font-size: .88rem;
+            font-weight: 700;
+            color: var(--t1);
+            line-height: 1;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .dmm-v.tl {
+            color: var(--teal);
+        }
+
+        .dmm-l {
+            font-size: .52rem;
+            color: var(--t3);
+            font-family: var(--fb);
+            margin-top: 2px;
+        }
+
+        /* ============================================================
+   PROOF STRIP
+   ============================================================ */
+        #proof {
+            background: var(--bg-1);
+            padding: 52px 0;
+            border-top: 1px solid var(--bdr);
+            border-bottom: 1px solid var(--bdr);
+        }
+
+        .proof-inner {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .proof-text {
+            font-size: .78rem;
+            color: var(--t3);
+            font-weight: 500;
+            letter-spacing: .04em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .proof-divider {
+            width: 1px;
+            height: 32px;
+            background: var(--bdr);
+            flex-shrink: 0;
+        }
+
+        .proof-stats {
+            display: flex;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .ps-num {
+            font-family: var(--fb);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--t1);
+            line-height: 1;
+            margin-bottom: .2rem;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .ps-num .gold {
+            color: var(--gold);
+        }
+
+        .ps-label {
+            font-size: .67rem;
+            color: var(--t3);
+            letter-spacing: .04em;
+        }
+
+        /* ============================================================
+   PROBLEMA & SOLUCAO
+   ============================================================ */
+        #problem {
+            background: var(--bg-0);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #problem .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(220, 70, 70, .05) 0%, transparent 70%);
+            top: 50%;
+            left: -150px;
+            transform: translateY(-50%);
+        }
+
+        .problem-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .problem-header .s-sub {
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .vs-grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 0;
+            position: relative;
+            z-index: 1;
+            align-items: start;
+        }
+
+        .vs-panel {
+            border-radius: var(--r-lg);
+            padding: 2.5rem;
+        }
+
+        .vs-before {
+            background: rgba(16, 11, 22, .9);
+            border: 1px solid var(--red-br);
+        }
+
+        .vs-after {
+            background: var(--card);
+            border: 1px solid var(--gold-br);
+        }
+
+        .vs-mid {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 1.25rem;
+            position: relative;
+        }
+
+        .vs-line {
+            position: absolute;
+            top: 8%;
+            bottom: 8%;
+            left: 50%;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, var(--bdr) 30%, var(--bdr) 70%, transparent);
+        }
+
+        .vs-vs {
+            font-family: var(--fh);
+            font-size: .7rem;
+            font-weight: 700;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: var(--t3);
+            writing-mode: vertical-lr;
+            transform: rotate(180deg);
+            user-select: none;
+        }
+
+        .vs-flag {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-size: .68rem;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            margin-bottom: 1.4rem;
+            padding-bottom: 1.4rem;
+            border-bottom: 1px solid var(--bdr);
+        }
+
+        .vs-flag.before {
+            color: #E05555;
+        }
+
+        .vs-flag.after {
+            color: var(--teal);
+        }
+
+        .flag-ic {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flag-ic.x {
+            background: rgba(220, 70, 70, .1);
+        }
+
+        .flag-ic.ok {
+            background: var(--teal-bg);
+        }
+
+        .vs-quote {
+            font-family: var(--fh);
+            font-size: 1.1rem;
+            font-weight: 600;
+            line-height: 1.45;
+            margin-bottom: 1.75rem;
+        }
+
+        .vs-before .vs-quote {
+            color: #FFB3B3;
+        }
+
+        .vs-after .vs-quote {
+            color: var(--t1);
+        }
+
+        .vs-list {
+            display: flex;
+            flex-direction: column;
+            gap: .9rem;
+        }
+
+        .vs-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 11px;
+            font-size: .875rem;
+            line-height: 1.65;
+        }
+
+        .vs-before .vs-item {
+            color: var(--t2);
+        }
+
+        .vs-after .vs-item {
+            color: var(--t1);
+        }
+
+        .vi-ic {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vi-ic.x {
+            background: rgba(220, 70, 70, .1);
+        }
+
+        .vi-ic.ok {
+            background: var(--teal-bg);
+            border: 1px solid var(--teal-br);
+        }
+
+        /* ============================================================
+   FEATURES — CREATIVE TIMELINE
+   ============================================================ */
+        #features {
+            background: var(--bg-1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #features .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(200, 168, 106, .05) 0%, transparent 65%);
+            top: 50%;
+            right: -250px;
+            transform: translateY(-50%);
+        }
+
+        .feat-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feat-header .s-sub {
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .tl-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .tl-top-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            align-items: end;
+        }
+
+        .tl-bottom-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            align-items: start;
+        }
+
+        .tl-top-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 0 .75rem 2.5rem;
+            position: relative;
+        }
+
+        .tl-top-card::after {
+            content: \'\';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 2.25rem;
+            background: linear-gradient(to bottom, var(--bdr), transparent);
+        }
+
+        .tl-bottom-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 2.5rem .75rem 0;
+            position: relative;
+        }
+
+        .tl-bottom-card::before {
+            content: \'\';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 2.25rem;
+            background: linear-gradient(to top, var(--bdr), transparent);
+        }
+
+        .tl-wave-row {
+            line-height: 0;
+        }
+
+        .tl-wave-svg {
+            width: 100%;
+            display: block;
+            overflow: visible;
+        }
+
+        .tl-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 11px;
+            background: var(--gold-bg);
+            border: 1px solid var(--gold-br);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            transition: background .25s;
+        }
+
+        .tl-top-card:hover .tl-icon,
+        .tl-bottom-card:hover .tl-icon {
+            background: rgba(200, 168, 106, .15);
+        }
+
+        .tl-icon svg {
+            width: 19px;
+            height: 19px;
+            stroke: var(--gold);
+            fill: none;
+            stroke-width: 1.75;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .tl-title {
+            font-family: var(--fh);
+            font-size: .9rem;
+            font-weight: 700;
+            color: var(--t1);
+            margin-bottom: .45rem;
+            line-height: 1.35;
+        }
+
+        .tl-desc {
+            font-size: .78rem;
+            color: var(--t2);
+            line-height: 1.72;
+        }
+
+        /* ============================================================
+   HOW IT WORKS (4 etapas)
+   ============================================================ */
+        #how {
+            background: var(--bg-0);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #how .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(46, 197, 160, .06) 0%, transparent 65%);
+            bottom: -150px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .how-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .how-header .s-sub {
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .how-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0;
+            position: relative;
+            z-index: 1;
+            align-items: start;
+        }
+
+        .how-step {
+            padding: 2.25rem;
+            position: relative;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .how-step:not(:last-child)::after {
+            content: \'\';
+            position: absolute;
+            right: 0;
+            top: 20%;
+            bottom: 20%;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, var(--bdr) 30%, var(--bdr) 70%, transparent);
+        }
+
+        .how-num {
+            font-family: var(--fb);
+            font-size: .65rem;
+            font-weight: 700;
+            letter-spacing: .14em;
+            color: var(--gold);
+            margin-bottom: 1.35rem;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .how-icon-wrap {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--card);
+            border: 1px solid var(--bdr);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.35rem;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .how-icon-wrap::after {
+            content: \'\';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 1px dashed var(--gold-br);
+        }
+
+        .how-icon-wrap svg {
+            width: 22px;
+            height: 22px;
+            stroke: var(--gold);
+            fill: none;
+            stroke-width: 1.75;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .how-title {
+            font-family: var(--fh);
+            font-size: .95rem;
+            font-weight: 700;
+            color: var(--t1);
+            margin-bottom: .55rem;
+        }
+
+        .how-desc {
+            font-size: .82rem;
+            color: var(--t2);
+            line-height: 1.72;
+            max-width: 210px;
+            margin: 0 auto;
+        }
+
+        .how-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: .62rem;
+            font-weight: 700;
+            letter-spacing: .07em;
+            text-transform: uppercase;
+            color: var(--teal);
+            background: var(--teal-bg);
+            border: 1px solid var(--teal-br);
+            padding: 3px 9px;
+            border-radius: 999px;
+            margin-top: .85rem;
+            font-family: var(--fb);
+        }
+
+        /* ============================================================
+   INSIGHTS / SOCIAL PROOF
+   ============================================================ */
+        #insights {
+            background: var(--bg-1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #insights .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(200, 168, 106, .06) 0%, transparent 65%);
+            top: -80px;
+            right: -120px;
+        }
+
+        .ins-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .ins-header .s-sub {
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .ins-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .ins-card {
+            background: var(--card);
+            border: 1px solid var(--bdr);
+            border-radius: var(--r-lg);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: border-color .25s, transform .25s;
+        }
+
+        .ins-card::before {
+            content: \'\';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--teal), var(--gold));
+        }
+
+        .ins-card:hover {
+            border-color: var(--gold-br);
+            transform: translateY(-4px);
+        }
+
+        .ins-big {
+            font-family: var(--fh);
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--gold);
+            line-height: 1;
+            margin-bottom: .4rem;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .ins-cat {
+            font-size: .68rem;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--t2);
+            margin-bottom: 1rem;
+            font-family: var(--fb);
+        }
+
+        .ins-desc {
+            font-size: .875rem;
+            color: var(--t2);
+            line-height: 1.75;
+            margin-bottom: 1.25rem;
+            font-family: var(--fb);
+        }
+
+        .ins-src {
+            font-size: .65rem;
+            color: var(--t3);
+            font-style: italic;
+            font-family: var(--fb);
+            padding-top: 1rem;
+            border-top: 1px solid var(--bdr);
+        }
+
+        .ins-callout {
+            margin-top: 2rem;
+            background: var(--gold-bg);
+            border: 1px solid var(--gold-br);
+            border-radius: var(--r-md);
+            padding: 1.5rem 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .clt-pct {
+            font-family: var(--fh);
+            font-size: 3.2rem;
+            font-weight: 800;
+            color: var(--gold);
+            flex-shrink: 0;
+            line-height: 1;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .clt-txt {
+            font-size: .975rem;
+            color: var(--t1);
+            font-family: var(--fh);
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .clt-src {
+            font-size: .7rem;
+            color: var(--t3);
+            margin-top: .4rem;
+            font-family: var(--fb);
+        }
+
+        /* ============================================================
+   PRICING
+   ============================================================ */
+        #pricing {
+            background: var(--bg-0);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #pricing .orb-1 {
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(200, 168, 106, .06) 0%, transparent 65%);
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .pricing-note {
+            text-align: center;
+            font-size: .875rem;
+            color: var(--t3);
+            margin-bottom: 3.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .pricing-note strong {
+            color: var(--t2);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            align-items: stretch;
+            position: relative;
+            z-index: 1;
+        }
+
+        .plan-card {
+            background: var(--card);
+            border: 1px solid var(--bdr);
+            border-radius: var(--r-lg);
+            padding: 2.25rem;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: transform .25s;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .plan-card.featured {
+            background: linear-gradient(158deg, #1C2342 0%, #141A30 100%);
+            border-color: var(--gold-br);
+            box-shadow: 0 0 0 1px var(--gold-br), 0 24px 80px rgba(0, 0, 0, .5), 0 0 40px rgba(200, 168, 106, .1);
+            transform: scaleY(1.018) translateY(-4px);
+            transform-origin: top center;
+        }
+
+        .plan-card.featured:hover {
+            transform: scaleY(1.018) translateY(-8px);
+            transform-origin: top center;
+        }
+
+        .plan-badge {
+            position: absolute;
+            top: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: var(--fb);
+            font-size: .62rem;
+            font-weight: 800;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: #07080F;
+            background: linear-gradient(90deg, var(--gold), var(--gold-lt));
+            padding: 4px 16px;
+            border-radius: 0 0 8px 8px;
+            white-space: nowrap;
+        }
+
+        .plan-tier {
+            font-size: .68rem;
+            font-weight: 700;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--t3);
+            font-family: var(--fb);
+            margin-bottom: .6rem;
+        }
+
+        .plan-card.featured .plan-tier {
+            color: var(--gold);
+        }
+
+        .plan-price-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 3px;
+            margin-bottom: .2rem;
+        }
+
+        .plan-curr {
+            font-family: var(--fb);
+            font-size: .9rem;
+            color: var(--t2);
+            margin-top: .55rem;
+        }
+
+        .plan-amt {
+            font-family: var(--fb);
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1;
+            color: var(--t1);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .plan-period {
+            font-size: .75rem;
+            color: var(--t3);
+            margin-bottom: .85rem;
+            font-family: var(--fb);
+        }
+
+        .plan-desc {
+            font-size: .82rem;
+            color: var(--t2);
+            line-height: 1.65;
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--bdr);
+            font-family: var(--fb);
+        }
+
+        .plan-feats {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: .72rem;
+            flex: 1;
+            margin-bottom: 2rem;
+        }
+
+        .plan-feat {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            font-size: .82rem;
+            color: var(--t2);
+            line-height: 1.5;
+            font-family: var(--fb);
+        }
+
+        .pf-chk {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--teal-bg);
+            border: 1px solid var(--teal-br);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .pf-chk svg {
+            width: 8px;
+            height: 8px;
+            stroke: var(--teal);
+            fill: none;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .plan-cta {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 13px;
+            border-radius: var(--r-sm);
+            font-family: var(--fb);
+            font-weight: 600;
+            font-size: .875rem;
+            border: none;
+            cursor: pointer;
+            transition: all .2s;
+            text-decoration: none;
+        }
+
+        .plan-cta.outline {
+            background: transparent;
+            border: 1px solid var(--gold-br);
+            color: var(--gold);
+        }
+
+        .plan-cta.outline:hover {
+            background: var(--gold-bg);
+        }
+
+        .plan-cta.solid {
+            background: linear-gradient(135deg, var(--gold) 0%, #B8924A 100%);
+            color: #07080F;
+            box-shadow: var(--sh-gold);
+        }
+
+        .plan-cta.solid:hover {
+            box-shadow: 0 8px 40px rgba(200, 168, 106, .38);
+            transform: translateY(-1px);
+        }
+
+        .pricing-footer-note {
+            text-align: center;
+            font-size: .78rem;
+            color: var(--t3);
+            margin-top: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .pricing-footer-note a {
+            color: var(--t2);
+            text-decoration: underline;
+        }
+
+        /* ============================================================
+   FAQ
+   ============================================================ */
+        #faq {
+            background: var(--bg-1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .faq-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .faq-list {
+            max-width: 780px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--bdr);
+        }
+
+        .faq-item:first-child {
+            border-top: 1px solid var(--bdr);
+        }
+
+        .faq-q {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            padding: 1.2rem 0;
+            background: none;
+            color: var(--t1);
+            font-family: var(--fh);
+            font-size: .975rem;
+            font-weight: 600;
+            text-align: left;
+            transition: color .2s;
+        }
+
+        .faq-q:hover {
+            color: var(--gold);
+        }
+
+        .faq-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid var(--bdr);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all .3s;
+        }
+
+        .faq-icon svg {
+            width: 13px;
+            height: 13px;
+            stroke: var(--t2);
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            transition: stroke .2s;
+        }
+
+        .faq-item.open .faq-icon {
+            background: var(--gold-bg);
+            border-color: var(--gold-br);
+            transform: rotate(45deg);
+        }
+
+        .faq-item.open .faq-icon svg {
+            stroke: var(--gold);
+        }
+
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height .38s cubic-bezier(.4, 0, .2, 1);
+        }
+
+        .faq-a-inner {
+            padding-bottom: 1.25rem;
+            font-size: .9rem;
+            color: var(--t2);
+            line-height: 1.8;
+            font-family: var(--fb);
+        }
+
+        .faq-a-inner a {
+            color: var(--gold);
+            text-decoration: underline;
+        }
+
+        /* ============================================================
+   FORM
+   ============================================================ */
+        #form-section {
+            background: var(--bg-0);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #form-section .orb-1 {
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(200, 168, 106, .07) 0%, transparent 65%);
+            top: -150px;
+            left: -200px;
+        }
+
+        #form-section .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(46, 197, 160, .05) 0%, transparent 65%);
+            bottom: -100px;
+            right: -100px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 5rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-info .s-title {
+            margin-bottom: .75rem;
+        }
+
+        .form-perks {
+            margin-top: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: .9rem;
+        }
+
+        .perk {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: .875rem;
+            color: var(--t2);
+            line-height: 1.65;
+            font-family: var(--fb);
+        }
+
+        .perk-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--gold);
+            flex-shrink: 0;
+            margin-top: 7px;
+        }
+
+        .form-card {
+            background: var(--card);
+            border: 1px solid var(--gold-br);
+            border-radius: var(--r-lg);
+            padding: 2.5rem;
+            box-shadow: 0 24px 80px rgba(0, 0, 0, .35), 0 0 0 1px rgba(200, 168, 106, .06);
+        }
+
+        .form-heading {
+            font-family: var(--fh);
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--t1);
+            margin-bottom: .4rem;
+        }
+
+        .form-subhead {
+            font-size: .875rem;
+            color: var(--t2);
+            margin-bottom: 2rem;
+            font-family: var(--fb);
+        }
+
+        .frow {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .fgroup {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: .9rem;
+        }
+
+        .fgroup.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: .72rem;
+            font-weight: 600;
+            letter-spacing: .05em;
+            color: var(--t2);
+            font-family: var(--fb);
+            text-transform: uppercase;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select {
+            background: var(--bg-1);
+            border: 1px solid var(--bdr);
+            border-radius: var(--r-sm);
+            padding: 11px 14px;
+            font-family: var(--fb);
+            font-size: .875rem;
+            color: var(--t1);
+            outline: none;
+            transition: border-color .2s, box-shadow .2s;
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        input::placeholder {
+            color: var(--t3);
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--gold-br);
+            box-shadow: 0 0 0 3px rgba(200, 168, 106, .06);
+        }
+
+        .sel-wrap {
+            position: relative;
+        }
+
+        .sel-wrap::after {
+            content: \'\';
+            position: absolute;
+            right: 13px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 5px solid var(--t3);
+            pointer-events: none;
+        }
+
+        select option {
+            background: #171E31;
+            color: var(--t1);
+        }
+
+        .btn-submit {
+            width: 100%;
+            margin-top: .25rem;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--gold) 0%, #B8924A 100%);
+            color: #07080F;
+            font-family: var(--fb);
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            border-radius: var(--r-sm);
+            cursor: pointer;
+            transition: transform .15s, box-shadow .2s;
+            box-shadow: var(--sh-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 40px rgba(200, 168, 106, .38);
+        }
+
+        .btn-submit:disabled {
+            cursor: not-allowed;
+            opacity: .9;
+        }
+
+        .form-legal {
+            font-size: .68rem;
+            color: var(--t3);
+            text-align: center;
+            margin-top: .9rem;
+            line-height: 1.7;
+            font-family: var(--fb);
+        }
+
+        .form-legal a {
+            color: var(--t2);
+            text-decoration: underline;
+        }
+
+        /* ============================================================
+   FOOTER
+   ============================================================ */
+        footer {
+            background: var(--bg-0);
+            border-top: 1px solid var(--bdr);
+            padding: 64px 0 40px;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 1.8fr 1fr 1fr;
+            gap: 3rem;
+            padding-bottom: 3rem;
+            margin-bottom: 2.5rem;
+            border-bottom: 1px solid var(--bdr);
+        }
+
+        .footer-brand .logo {
+            margin-bottom: 1rem;
+        }
+
+        .footer-tagline {
+            font-size: .82rem;
+            color: var(--t3);
+            line-height: 1.75;
+            max-width: 250px;
+            margin-bottom: 1.5rem;
+            font-family: var(--fb);
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .soc-link {
+            width: 34px;
+            height: 34px;
+            border-radius: var(--r-sm);
+            border: 1px solid var(--bdr);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--t3);
+            transition: all .2s;
+            text-decoration: none;
+        }
+
+        .soc-link:hover {
+            border-color: var(--gold-br);
+            color: var(--gold);
+        }
+
+        .soc-link svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        .fc-label {
+            font-size: .68rem;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--t3);
+            margin-bottom: 1.15rem;
+            font-family: var(--fb);
+        }
+
+        .fc-links {
+            display: flex;
+            flex-direction: column;
+            gap: .65rem;
+        }
+
+        .fc-links a {
+            font-size: .855rem;
+            color: var(--t2);
+            transition: color .2s;
+            font-family: var(--fb);
+        }
+
+        .fc-links a:hover {
+            color: var(--t1);
+        }
+
+        .footer-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .footer-copy {
+            font-size: .75rem;
+            color: var(--t3);
+            font-family: var(--fb);
+        }
+
+        /* ============================================================
+   RESPONSIVE
+   ============================================================ */
+        @media (max-width: 1100px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .hero-visual {
+                max-width: 500px;
+                margin: 0 auto;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 430px;
+                margin: 0 auto;
+            }
+
+            .plan-card.featured {
+                transform: none;
+            }
+
+            .plan-card.featured:hover {
+                transform: translateY(-4px);
+            }
+
+            .footer-top {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .vs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .vs-mid {
+                display: none;
+            }
+
+            .vs-panel {
+                margin-bottom: 1rem;
+            }
+
+            .how-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .how-step:nth-child(2)::after {
+                display: none;
+            }
+
+            .ins-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .tl-container {
+                display: flex;
+                flex-direction: column;
+                gap: 1.25rem;
+            }
+
+            .tl-top-row,
+            .tl-bottom-row {
+                display: contents;
+            }
+
+            .tl-wave-row {
+                display: none;
+            }
+
+            .tl-spacer {
+                display: none;
+            }
+
+            .tl-card-1 {
+                order: 1
+            }
+
+            .tl-card-2 {
+                order: 2
+            }
+
+            .tl-card-3 {
+                order: 3
+            }
+
+            .tl-card-4 {
+                order: 4
+            }
+
+            .tl-card-5 {
+                order: 5
+            }
+
+            .tl-top-card,
+            .tl-bottom-card {
+                padding: 1.1rem 1.25rem;
+                display: grid;
+                grid-template-columns: auto 1fr;
+                grid-template-rows: auto auto;
+                column-gap: .85rem;
+                row-gap: .35rem;
+                align-items: center;
+                text-align: left;
+                background: var(--card);
+                border: 1px solid var(--bdr);
+                border-radius: var(--r-md);
+            }
+
+            .tl-top-card::after,
+            .tl-bottom-card::before {
+                display: none;
+            }
+
+            .tl-icon {
+                margin-bottom: 0;
+                flex-shrink: 0;
+                grid-column: 1;
+                grid-row: 1 / 3;
+                align-self: start;
+            }
+
+            .tl-title {
+                grid-column: 2;
+                grid-row: 1;
+                margin-bottom: 0;
+            }
+
+            .tl-desc {
+                grid-column: 2;
+                grid-row: 2;
+            }
+        }
+
+        @media (max-width: 768px) {
+            section {
+                padding: 80px 0;
+            }
+
+            .wrap {
+                padding: 0 1.25rem;
+            }
+
+            .nav-links,
+            .nav-actions .btn-nav {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hero-stats {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1.25rem 1.5rem;
+            }
+
+            .hero-stats>div {
+                min-width: 0;
+            }
+
+            .how-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .how-step:not(:last-child)::after {
+                display: none;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .frow {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-top {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.5rem;
+            }
+
+            .proof-divider {
+                display: none;
+            }
+
+            .ins-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .ins-callout {
+                flex-direction: column;
+                gap: .75rem;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-ctas {
+                flex-direction: column;
+            }
+
+            .hero-ctas .btn-gold,
+            .hero-ctas .btn-ghost {
+                justify-content: center;
+            }
+
+            /* billing badge: static on narrow screens */
+            .billing-toggle-wrap {
+                flex-wrap: wrap;
+                gap: .75rem;
+                justify-content: center;
+            }
+
+            .billing-save-badge.is-visible {
+                position: static;
+                transform: none;
+                left: auto;
+                top: auto;
+                display: inline-flex;
+            }
+
+            /* proof-stats 2×2 grid */
+            .proof-stats {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1.25rem 1.5rem;
+                width: 100%;
+            }
+
+            .proof-stat {
+                min-width: 0;
+            }
+
+            .proof-inner {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.25rem;
+            }
+
+            .proof-text {
+                align-self: center;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: .01ms !important;
+                transition-duration: .01ms !important;
+            }
+
+            .reveal {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        /* ── Billing toggle ──────────────────────────────────────────── */
+        .billing-toggle-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1.75rem 0 2.5rem;
+        }
+
+        .billing-toggle {
+            display: inline-flex;
+            background: var(--s2);
+            border: 1px solid var(--bdr);
+            border-radius: 999px;
+            padding: 5px;
+            gap: 3px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, .2);
+        }
+
+        .bill-btn {
+            font-family: var(--fb);
+            font-size: .85rem;
+            font-weight: 700;
+            padding: .45rem 1.5rem;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            color: var(--t2);
+            background: transparent;
+            transition: background .2s, color .2s, box-shadow .2s;
+            letter-spacing: .02em;
+            white-space: nowrap;
+            line-height: 1;
+        }
+
+        .bill-btn.active {
+            background: var(--teal);
+            color: #000;
+            box-shadow: 0 2px 8px rgba(46, 197, 160, .3);
+        }
+
+        .billing-save-badge {
+            display: none;
+            align-items: center;
+            gap: .3rem;
+            font-size: .75rem;
+            font-weight: 700;
+            color: var(--gold);
+            background: rgba(200, 168, 106, .13);
+            border: 1px solid rgba(200, 168, 106, .3);
+            border-radius: 999px;
+            padding: .3rem .85rem;
+            font-family: var(--fb);
+            letter-spacing: .02em;
+            white-space: nowrap;
+            position: absolute;
+            left: calc(50% + 105px);
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        /* billing-save-badge visibility — must follow base rule */
+        .billing-save-badge.is-visible {
+            display: inline-flex;
         }
     </style>
 </head>
 
 <body>
 
-    <div class="container">
-        <h1>Flow Agent</h1>
-        <p>Transforme seu atendimento com inteligência artificial</p>
+    <!-- MOBILE NAV -->
+    <div id="mobile-nav" class="mobile-nav" role="dialog" aria-modal="true" aria-label="Menu de navegação">
+        <div class="mn-header">
+            <a href="#" class="logo" onclick="closeMobileMenu()">
+                <div class="logo-mark">
+                    <svg viewBox="0 0 20 20" fill="none">
+                        <!-- Antenna -->
+                        <line x1="10" y1="2" x2="10" y2="4.5" stroke="#2EC5A0" stroke-width="1.2"
+                            stroke-linecap="round" />
+                        <circle cx="10" cy="1.5" r="1" fill="#2EC5A0" opacity=".9" />
+                        <!-- Head body -->
+                        <rect x="3.5" y="5" width="13" height="10" rx="3" fill="none" stroke="#2EC5A0"
+                            stroke-width="1.3" opacity=".9" />
+                        <!-- Eyes -->
+                        <circle cx="7.5" cy="9.5" r="1.4" fill="#DFCA98" opacity=".95" />
+                        <circle cx="12.5" cy="9.5" r="1.4" fill="#DFCA98" opacity=".95" />
+                        <!-- Eye shine -->
+                        <circle cx="8" cy="9" r=".4" fill="white" opacity=".7" />
+                        <circle cx="13" cy="9" r=".4" fill="white" opacity=".7" />
+                        <!-- Mouth bar -->
+                        <rect x="7" y="12" width="6" height="1.2" rx=".6" fill="#2EC5A0" opacity=".7" />
+                    </svg>
+                </div>
+                <span><span class="logo-grad">Flow</span> Agent</span>
+            </a>
+            <button class="mn-close" id="close-menu" aria-label="Fechar menu">&#10005;</button>
+        </div>
+        <nav class="mn-links">
+            <a href="#features">Pilares</a>
+            <a href="#how">Como Funciona</a>
+            <a href="#insights">Por que IA</a>
+            <a href="#pricing">Planos</a>
+            <a href="#faq">FAQ</a>
+        </nav>
+        <div class="mn-cta">
+            <a href="#form-section" class="btn-gold" data-i18n="hero-cta-primary">Solicitar meu Agente de IA</a>
+            <a href="#pricing" class="btn-ghost" data-i18n="mn-cta-plans">Ver planos e preços</a>
+        </div>
+        <div class="mn-lang">
+            <div class="lang-toggle">
+                <button class="lang-btn active" onclick="setLang('PT',this)">PT</button>
+                <button class="lang-btn" onclick="setLang('EN',this)">EN</button>
+            </div>
+        </div>
     </div>
+
+    <!-- HEADER -->
+    <header id="header">
+        <div class="wrap">
+            <div class="nav-inner">
+                <a href="#" class="logo">
+                    <div class="logo-mark">
+                        <svg viewBox="0 0 20 20" fill="none">
+                            <!-- Antenna -->
+                            <line x1="10" y1="2" x2="10" y2="4.5" stroke="#2EC5A0" stroke-width="1.2"
+                                stroke-linecap="round" />
+                            <circle cx="10" cy="1.5" r="1" fill="#2EC5A0" opacity=".9" />
+                            <!-- Head body -->
+                            <rect x="3.5" y="5" width="13" height="10" rx="3" fill="none" stroke="#2EC5A0"
+                                stroke-width="1.3" opacity=".9" />
+                            <!-- Eyes -->
+                            <circle cx="7.5" cy="9.5" r="1.4" fill="#DFCA98" opacity=".95" />
+                            <circle cx="12.5" cy="9.5" r="1.4" fill="#DFCA98" opacity=".95" />
+                            <!-- Eye shine -->
+                            <circle cx="8" cy="9" r=".4" fill="white" opacity=".7" />
+                            <circle cx="13" cy="9" r=".4" fill="white" opacity=".7" />
+                            <!-- Mouth bar -->
+                            <rect x="7" y="12" width="6" height="1.2" rx=".6" fill="#2EC5A0" opacity=".7" />
+                        </svg>
+                    </div>
+                    <span><span class="logo-grad">Flow</span> Agent</span>
+                </a>
+                <nav class="nav-links" aria-label="Navegação principal">
+                    <a href="#features" data-i18n="nav-features">Pilares</a>
+                    <a href="#how" data-i18n="nav-how">Como Funciona</a>
+                    <a href="#insights" data-i18n="nav-insights">Por que IA</a>
+                    <a href="#pricing" data-i18n="nav-pricing">Planos</a>
+                    <a href="#faq" data-i18n="nav-faq">FAQ</a>
+                </nav>
+                <div class="nav-actions">
+                    <div class="lang-toggle">
+                        <button class="lang-btn active" onclick="setLang('PT',this)">PT</button>
+                        <button class="lang-btn" onclick="setLang('EN',this)">EN</button>
+                    </div>
+                    <a href="#form-section" class="btn-nav" id="nav-demo-cta">
+                        <span data-i18n="nav-cta">Solicitar Demo</span>
+                        <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                            <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </a>
+                </div>
+                <button class="hamburger" id="hamburger" aria-label="Abrir menu" aria-expanded="false">
+                    <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
+                        <rect width="18" height="2" rx="1" fill="currentColor" />
+                        <rect y="6" width="18" height="2" rx="1" fill="currentColor" />
+                        <rect y="12" width="18" height="2" rx="1" fill="currentColor" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section id="hero">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="wrap">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <div class="hero-eyebrow">
+                        <span class="eyebrow-dot"></span>
+                        <span data-i18n="hero-eyebrow">Agente de IA humanizado com n8n &middot; Beleza e Estética
+                            Premium</span>
+                    </div>
+                    <h1 class="hero-h1" data-i18n="hero-h1">Automação com IA<br>para o <span
+                            class="gold">fluxo</span><br>do seu negócio.</h1>
+                    <p class="hero-slogan" data-i18n="hero-slogan">Inteligência automatizada para o fluxo do seu
+                        negócio.</p>
+                    <p class="hero-sub" data-i18n="hero-sub">Flow Agent é um Agente de IA construído com n8n que atende
+                        seus clientes de forma <strong style="color:var(--t1)">humanizada e personalizada</strong> para
+                        o seu nicho — agendando, confirmando e fidelizando via WhatsApp 24 horas por dia. Entregue
+                        totalmente configurado e pronto para usar.</p>
+                    <div class="hero-ctas">
+                        <a href="#pricing" class="btn-gold">
+                            <span data-i18n="hero-cta-primary">Solicitar meu Agente de IA</span>
+                            <svg class="arrow-icon" viewBox="0 0 14 14" fill="none">
+                                <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </a>
+                        <a href="#how" class="btn-ghost">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.5" />
+                                <path d="M7 4.5V7.5L8.5 9" stroke="currentColor" stroke-width="1.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            <span data-i18n="hero-cta-secondary">Ver como funciona</span>
+                        </a>
+                    </div>
+                    <div class="hero-stats">
+                        <div>
+                            <div class="stat-num"><span class="gold">24/7</span></div>
+                            <div class="stat-label" data-i18n="stat-1-label">Disponível, sem<br>pausas ou folgas</div>
+                        </div>
+                        <div>
+                            <div class="stat-num"><span class="gold">~15s</span></div>
+                            <div class="stat-label" data-i18n="stat-2-label">Tempo médio<br>de resposta</div>
+                        </div>
+                        <div>
+                            <div class="stat-num"><span class="gold">7 <span data-i18n="stat-days">dias</span></span>
+                            </div>
+                            <div class="stat-label" data-i18n="stat-3-label">Ativo após<br>a contratação</div>
+                        </div>
+                        <div>
+                            <div class="stat-num"><span class="gold">14 <span data-i18n="stat-days">dias</span></span>
+                            </div>
+                            <div class="stat-label" data-i18n="stat-4-label">Grátis para<br>testar</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WhatsApp Chat Mockup -->
+                <div class="hero-visual">
+                    <div class="hero-visual-glow"></div>
+                    <div class="dash-mock" role="img" aria-label="Preview do Flow Agent no WhatsApp">
+                        <div class="dm-bar">
+                            <div class="dm-dots"><span></span><span></span><span></span></div>
+                            <span class="dm-title" data-i18n="dm-title">Flow Agent &middot; Agente WhatsApp</span>
+                            <div class="dm-live"><span class="dm-live-dot"></span> <span
+                                    data-i18n="dm-ativo">Ativo</span></div>
+                        </div>
+                        <div class="dm-chat-hdr">
+                            <div class="dm-contact-av">FA</div>
+                            <div>
+                                <div class="dm-contact-name">Fernanda Alves</div>
+                                <div class="dm-contact-online" data-i18n="dm-online">online agora</div>
+                            </div>
+                        </div>
+                        <div class="dm-msgs">
+                            <div class="dm-msg in">
+                                <div class="dm-bubble" data-i18n="bubble-1">Oi! Quero agendar uma limpeza de pele para
+                                    esta semana 😊</div>
+                                <div class="dm-time">14:22</div>
+                            </div>
+                            <div class="dm-msg out">
+                                <div class="dm-bubble" data-i18n="bubble-2">Olá, Fernanda! Que ótimo ouvir você 😊 Temos
+                                    horários disponíveis
+                                    para limpeza de pele:</div>
+                                <div class="dm-time">14:22</div>
+                            </div>
+                            <div class="dm-msg out">
+                                <div class="dm-bubble" data-i18n="bubble-3">📅 Terça, 14h &nbsp;·&nbsp; Quinta, 10h
+                                    &nbsp;·&nbsp; Sexta,
+                                    16h30</div>
+                                <div class="dm-time">14:22</div>
+                            </div>
+                            <div class="dm-msg in">
+                                <div class="dm-bubble" data-i18n="bubble-4">Terça às 14h, por favor!</div>
+                                <div class="dm-time">14:23</div>
+                            </div>
+                            <div class="dm-msg out">
+                                <div class="dm-bubble" data-i18n="bubble-5">✅ Perfeito! Agendado para terça, 14h.
+                                    Enviarei um lembrete antes,
+                                    tá bem? 🗓️</div>
+                                <div class="dm-time">14:23</div>
+                            </div>
+                        </div>
+                        <div class="dm-flow-tags">
+                            <span class="dm-ftag" data-i18n="dm-ftag-1">Agendamento criado</span>
+                            <span class="dm-ftag gold" data-i18n="dm-ftag-2">Lembrete programado</span>
+                            <span class="dm-ftag" data-i18n="dm-ftag-3">Histórico atualizado</span>
+                        </div>
+                        <div class="dm-mini">
+                            <div class="dmm">
+                                <div class="dmm-v tl">24/7</div>
+                                <div class="dmm-l" data-i18n="dmm-l-1">on-line</div>
+                            </div>
+                            <div class="dmm">
+                                <div class="dmm-v">8</div>
+                                <div class="dmm-l" data-i18n="dmm-l-2">agenda hoje</div>
+                            </div>
+                            <div class="dmm">
+                                <div class="dmm-v tl">0</div>
+                                <div class="dmm-l" data-i18n="dmm-l-3">sem resposta</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROOF STRIP -->
+    <div id="proof">
+        <div class="wrap">
+            <div class="proof-inner">
+                <span class="proof-text" data-i18n="proof-text">Capacidades comprovadas pelo mercado</span>
+                <div class="proof-divider"></div>
+                <div class="proof-stats">
+                    <div class="proof-stat">
+                        <div class="ps-num"><span class="gold">&#8722;40%</span></div>
+                        <div class="ps-label" data-i18n="ps-label-1">Redução de no-show</div>
+                    </div>
+                    <div class="proof-stat">
+                        <div class="ps-num"><span class="gold">65%</span></div>
+                        <div class="ps-label" data-i18n="ps-label-2">Mais conversão de leads</div>
+                    </div>
+                    <div class="proof-stat">
+                        <div class="ps-num"><span class="gold">~15s</span></div>
+                        <div class="ps-label" data-i18n="ps-label-3">Resposta humanizada</div>
+                    </div>
+                    <div class="proof-stat">
+                        <div class="ps-num"><span class="gold">zero</span></div>
+                        <div class="ps-label" data-i18n="ps-label-4">Leads perdidos fora do horário</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROBLEMA & SOLUÇÃO -->
+    <section id="problem">
+        <div class="orb orb-1"></div>
+        <div class="wrap">
+            <div class="problem-header reveal">
+                <span class="s-label" data-i18n="problem-label">O Diagnóstico</span>
+                <h2 class="s-title" data-i18n="problem-title">O que acontece quando seu<br>WhatsApp não tem inteligência
+                </h2>
+                <p class="s-sub" style="margin:0 auto;text-align:center" data-i18n="problem-sub">Clínicas e salões de
+                    alto padrão perdem clientes e receita todos os dias por falta de automação no atendimento. Isso tem
+                    solução.</p>
+            </div>
+            <div class="vs-grid">
+                <div class="vs-panel vs-before reveal">
+                    <div class="vs-flag before">
+                        <div class="flag-ic x">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                <path d="M2 2l8 8M10 2L2 10" stroke="#E05555" stroke-width="1.75"
+                                    stroke-linecap="round" />
+                            </svg>
+                        </div>
+                        <span data-i18n="vs-before-flag">Sem o Flow Agent</span>
+                    </div>
+                    <p class="vs-quote" data-i18n="vs-before-quote">"Quando chego de manhã, já tenho 20 mensagens não
+                        respondidas — metade são clientes que desistiram."</p>
+                    <ul class="vs-list">
+                        <li class="vs-item">
+                            <div class="vi-ic x"><svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                                    <path d="M1 1l6 6M7 1L1 7" stroke="#E05555" stroke-width="1.5"
+                                        stroke-linecap="round" />
+                                </svg></div>
+                            <span data-i18n="vs-b-1">Leads chegam fora do horário e ficam sem resposta por horas — e vão
+                                para o concorrente</span>
+                        </li>
+                        <li class="vs-item">
+                            <div class="vi-ic x"><svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                                    <path d="M1 1l6 6M7 1L1 7" stroke="#E05555" stroke-width="1.5"
+                                        stroke-linecap="round" />
+                                </svg></div>
+                            <span data-i18n="vs-b-2">Equipe gasta horas por dia respondendo WhatsApp em vez de atender
+                                clientes presencialmente</span>
+                        </li>
+                        <li class="vs-item">
+                            <div class="vi-ic x"><svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                                    <path d="M1 1l6 6M7 1L1 7" stroke="#E05555" stroke-width="1.5"
+                                        stroke-linecap="round" />
+                                </svg></div>
+                            <span data-i18n="vs-b-3">Confirmações de agendamento manuais resultam em alta taxa de
+                                no-show e prejuízo financeiro</span>
+                        </li>
+                        <li class="vs-item">
+                            <div class="vi-ic x"><svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                                    <path d="M1 1l6 6M7 1L1 7" stroke="#E05555" stroke-width="1.5"
+                                        stroke-linecap="round" />
+                                </svg></div>
+                            <span data-i18n="vs-b-4">Clientes inativos sumindo sem que ninguém perceba ou faça algo para
+                                recuperá-los</span>
+                        </li>
+                        <li class="vs-item">
+                            <div class="vi-ic x"><svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                                    <path d="M1 1l6 6M7 1L1 7" stroke="#E05555" stroke-width="1.5"
+                                        stroke-linecap="round" />
+                                </svg></div>
+                            <span data-i18n="vs-b-5">Zero visibilidade sobre quantos leads foram perdidos ou por que
+                                clientes pararam de voltar</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="vs-mid">
+                    <div class="vs-line"></div>
+                    <span class="vs-vs">versus</span>
+                </div>
+                <div class="vs-panel vs-after reveal d1">
+                    <div class="vs-flag after">
+                        <div class="flag-ic ok">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                                <path d="M2 6.5L5 9.5 10 3" stroke="#2EC5A0" stroke-width="1.75" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                        <span data-i18n="vs-after-flag">Com o Flow Agent</span>
+                    </div>
+                    <p class="vs-quote" data-i18n="vs-after-quote">"O Agente responde como se fosse eu — de forma
+                        personalizada — agenda, confirma e fideliza os clientes."</p>
+                    <ul class="vs-list">
+                        <li class="vs-item">
+                            <div class="vi-ic ok"><svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                                    <path d="M1 4l2 2.5L7 1.5" stroke="#2EC5A0" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg></div>
+                            <span data-i18n="vs-a-1">IA humanizada responde leads 24/7 em ~15s — com linguagem
+                                personalizada para o seu nicho</span>
+                        </li>
+                        <li class="vs-item">
+                            <div class="vi-ic ok"><svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                                    <path d="M1 4l2 2.5L7 1.5" stroke="#2EC5A0" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg></div>
+                            <span data-i18n="vs-a-2">Agendamentos feitos automaticamente via conversa natural no
+                                WhatsApp, sem intervenção manual</span>
+                        </li>
+                        <li class="vs-item">
+                            <div class="vi-ic ok"><svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                                    <path d="M1 4l2 2.5L7 1.5" stroke="#2EC5A0" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg></div>
+                            <span data-i18n="vs-a-3">Confirmações e lembretes automáticos reduzem no-show em até 40% já
+                                no primeiro mês</span>
+                        </li>
+                        <li class="vs-item">
+                            <div class="vi-ic ok"><svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                                    <path d="M1 4l2 2.5L7 1.5" stroke="#2EC5A0" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg></div>
+                            <span data-i18n="vs-a-4">Régua de reativação automática identifica clientes inativos e os
+                                traz de volta com a oferta
+                                certa</span>
+                        </li>
+                        <li class="vs-item">
+                            <div class="vi-ic ok"><svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                                    <path d="M1 4l2 2.5L7 1.5" stroke="#2EC5A0" stroke-width="1.5"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg></div>
+                            <span data-i18n="vs-a-5">Relatório de conversas e leads mostra oportunidades em aberto e
+                                histórico de atendimento</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES — CREATIVE S-CURVE TIMELINE -->
+    <section id="features">
+        <div class="orb orb-1"></div>
+        <div class="wrap">
+            <div class="feat-header reveal">
+                <span class="s-label" data-i18n="features-label">Pilares do Agente</span>
+                <h2 class="s-title" data-i18n="features-title">Cinco automações que<br>transformam sua operação</h2>
+                <p class="s-sub" data-i18n="features-sub">Cada pilar é um fluxo n8n configurado e personalizado para o
+                    seu nicho — entregue pronto para usar, sem você precisar tocar em código.</p>
+            </div>
+            <div class="tl-container">
+                <!-- TOP ROW: cards 1, 3, 5 -->
+                <div class="tl-top-row">
+                    <div class="tl-card tl-card-1 tl-top-card reveal">
+                        <div class="tl-icon">
+                            <svg viewBox="0 0 22 22">
+                                <path d="M3 8a4 4 0 014-4h8a4 4 0 014 4v2a4 4 0 01-4 4H7L3 18V8z" />
+                            </svg>
+                        </div>
+                        <h3 class="tl-title" data-i18n="feat-1-title">Atendimento Humanizado 24/7</h3>
+                        <p class="tl-desc" data-i18n="feat-1-desc">IA que conversa de forma personalizada e natural,
+                            nunca deixa mensagem sem resposta e qualifica leads — mesmo às 3h da manhã.</p>
+                    </div>
+                    <div class="tl-spacer"></div>
+                    <div class="tl-card tl-card-3 tl-top-card reveal d1">
+                        <div class="tl-icon">
+                            <svg viewBox="0 0 22 22">
+                                <path d="M5 10c0-1 .7-1.7 1.5-2L11 5.5 15.5 8c.8.3 1.5 1 1.5 2v6.5L11 19l-6-2.5V10z" />
+                            </svg>
+                        </div>
+                        <h3 class="tl-title" data-i18n="feat-3-title">Régua de Relacionamento Automática</h3>
+                        <p class="tl-desc" data-i18n="feat-3-desc">Confirmação, lembrete pré-consulta, pesquisa
+                            pós-atendimento e follow-up de retorno — tudo no piloto automático.</p>
+                    </div>
+                    <div class="tl-spacer"></div>
+                    <div class="tl-card tl-card-5 tl-top-card reveal d2">
+                        <div class="tl-icon">
+                            <svg viewBox="0 0 22 22">
+                                <path d="M2 16l5-8 4 5 3-4 6 7H2z" />
+                                <circle cx="15" cy="6" r="2" />
+                            </svg>
+                        </div>
+                        <h3 class="tl-title" data-i18n="feat-5-title">Relatório de Conversas e Leads</h3>
+                        <p class="tl-desc" data-i18n="feat-5-desc">Histórico de conversas, leads qualificados e status
+                            de atendimento — para você acompanhar o desempenho do agente.</p>
+                    </div>
+                </div>
+
+                <!-- S-CURVE SVG WAVE -->
+                <div class="tl-wave-row" aria-hidden="true">
+                    <svg class="tl-wave-svg" viewBox="0 0 1000 120" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        preserveAspectRatio="none">
+                        <path d="M 0,25 L 100,25 C 200,25 200,95 300,95" stroke="#2EC5A0" stroke-width="5"
+                            stroke-linecap="round" fill="none" />
+                        <path d="M 300,95 C 400,95 400,25 500,25" stroke="#C8A86A" stroke-width="5"
+                            stroke-linecap="round" fill="none" />
+                        <path d="M 500,25 C 600,25 600,95 700,95" stroke="#2EC5A0" stroke-width="5"
+                            stroke-linecap="round" fill="none" />
+                        <path d="M 700,95 C 800,95 800,25 900,25 L 1000,25" stroke="#C8A86A" stroke-width="5"
+                            stroke-linecap="round" fill="none" />
+                        <circle cx="100" cy="25" r="22" fill="#171E31" stroke="#2EC5A0" stroke-width="2.5" />
+                        <text x="100" y="25" text-anchor="middle" dominant-baseline="central" fill="#EBE9E2"
+                            font-size="11" font-family="Plus Jakarta Sans, sans-serif" font-weight="700">01</text>
+                        <circle cx="300" cy="95" r="22" fill="#171E31" stroke="#C8A86A" stroke-width="2.5" />
+                        <text x="300" y="95" text-anchor="middle" dominant-baseline="central" fill="#EBE9E2"
+                            font-size="11" font-family="Plus Jakarta Sans, sans-serif" font-weight="700">02</text>
+                        <circle cx="500" cy="25" r="22" fill="#171E31" stroke="#2EC5A0" stroke-width="2.5" />
+                        <text x="500" y="25" text-anchor="middle" dominant-baseline="central" fill="#EBE9E2"
+                            font-size="11" font-family="Plus Jakarta Sans, sans-serif" font-weight="700">03</text>
+                        <circle cx="700" cy="95" r="22" fill="#171E31" stroke="#C8A86A" stroke-width="2.5" />
+                        <text x="700" y="95" text-anchor="middle" dominant-baseline="central" fill="#EBE9E2"
+                            font-size="11" font-family="Plus Jakarta Sans, sans-serif" font-weight="700">04</text>
+                        <circle cx="900" cy="25" r="22" fill="#171E31" stroke="#2EC5A0" stroke-width="2.5" />
+                        <text x="900" y="25" text-anchor="middle" dominant-baseline="central" fill="#EBE9E2"
+                            font-size="11" font-family="Plus Jakarta Sans, sans-serif" font-weight="700">05</text>
+                    </svg>
+                </div>
+
+                <!-- BOTTOM ROW: spacer, card 2, spacer, card 4, spacer -->
+                <div class="tl-bottom-row">
+                    <div class="tl-spacer"></div>
+                    <div class="tl-card tl-card-2 tl-bottom-card reveal d1">
+                        <div class="tl-icon">
+                            <svg viewBox="0 0 22 22">
+                                <rect x="2" y="4" width="18" height="16" rx="2" />
+                                <path d="M2 9h18" />
+                                <path d="M7 2v4M15 2v4" />
+                                <path d="M7 14h1l2-3 2 4 1-2h2" />
+                            </svg>
+                        </div>
+                        <h3 class="tl-title" data-i18n="feat-2-title">Agendamento Automatizado por IA</h3>
+                        <p class="tl-desc" data-i18n="feat-2-desc">Cliente pede, agente verifica disponibilidade,
+                            confirma e registra — sem nenhuma intervenção manual da sua equipe.</p>
+                    </div>
+                    <div class="tl-spacer"></div>
+                    <div class="tl-card tl-card-4 tl-bottom-card reveal d2">
+                        <div class="tl-icon">
+                            <svg viewBox="0 0 22 22">
+                                <path d="M4 17c0-2.5 2-4 4.5-4a5 5 0 015 4" />
+                                <circle cx="9" cy="7" r="3.5" />
+                                <path d="M17 10l2 2-3 3" />
+                                <path d="M15.5 8a3.5 3.5 0 010 7" />
+                            </svg>
+                        </div>
+                        <h3 class="tl-title" data-i18n="feat-4-title">Reativação Inteligente de Inativos</h3>
+                        <p class="tl-desc" data-i18n="feat-4-desc">IA identifica clientes sumidos há 30, 60 ou 90 dias e
+                            dispara mensagens personalizadas com a oferta certa na hora certa.</p>
+                    </div>
+                    <div class="tl-spacer"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="how">
+        <div class="orb orb-1"></div>
+        <div class="wrap">
+            <div class="how-header reveal">
+                <span class="s-label" data-i18n="how-label">Como Funciona</span>
+                <h2 class="s-title" data-i18n="how-title">Entregue configurado.<br>Ativo em até 7 dias.</h2>
+                <p class="s-sub" data-i18n="how-sub">Você não precisa entender de tecnologia, n8n ou IA. Cuidamos de
+                    tudo — você só precisa sincronizar o WhatsApp.</p>
+            </div>
+            <div class="how-grid">
+                <div class="how-step reveal">
+                    <div class="how-num">01</div>
+                    <div class="how-icon-wrap">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            <path d="M9 12h6M9 16h4" />
+                        </svg>
+                    </div>
+                    <h3 class="how-title" data-i18n="how-1-title">Escolha seu plano</h3>
+                    <p class="how-desc" data-i18n="how-1-desc">Selecione o plano ideal para o seu negócio. Após a
+                        confirmação do pagamento, nossa equipe entrará em contato para iniciar a integração.</p>
+                    <span class="how-badge" data-i18n="how-1-badge">Comece agora</span>
+                </div>
+                <div class="how-step reveal d1">
+                    <div class="how-num">02</div>
+                    <div class="how-icon-wrap">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="3" />
+                            <path
+                                d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" />
+                        </svg>
+                    </div>
+                    <h3 class="how-title" data-i18n="how-2-title">Receba seu Agente pronto</h3>
+                    <p class="how-desc" data-i18n="how-2-desc">Configuramos todos os fluxos n8n, o Agente de IA e as
+                        integrações do plano. Você recebe tudo funcionando — zero configuração manual.</p>
+                    <span class="how-badge" data-i18n="how-2-badge">Entregue em 7 dias</span>
+                </div>
+                <div class="how-step reveal d2">
+                    <div class="how-num">03</div>
+                    <div class="how-icon-wrap">
+                        <svg viewBox="0 0 24 24">
+                            <rect x="5" y="5" width="5" height="5" rx="1" />
+                            <rect x="14" y="5" width="5" height="5" rx="1" />
+                            <rect x="5" y="14" width="5" height="5" rx="1" />
+                            <rect x="16" y="16" width="3" height="3" rx=".5" />
+                            <path d="M14 14h3v2M14 14v3" />
+                        </svg>
+                    </div>
+                    <h3 class="how-title" data-i18n="how-3-title">Ative via WhatsApp</h3>
+                    <p class="how-desc" data-i18n="how-3-desc">Sincronize seu WhatsApp Business com o Agente escaneando
+                        o QR Code ou digitando o código enviado para o seu WhatsApp.</p>
+                    <span class="how-badge" data-i18n="how-3-badge">QR Code ou código</span>
+                </div>
+                <div class="how-step reveal d3">
+                    <div class="how-num">04</div>
+                    <div class="how-icon-wrap">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" />
+                            <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" />
+                        </svg>
+                    </div>
+                    <h3 class="how-title" data-i18n="how-4-title">Conecte suas ferramentas</h3>
+                    <p class="how-desc" data-i18n="how-4-desc">A depender do plano, forneça acesso às APIs do seu
+                        sistema de agenda ou calendário. Temos guia passo a passo ou fazemos por você.</p>
+                    <span class="how-badge" data-i18n="how-4-badge">Opcional por plano</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INSIGHTS / SOCIAL PROOF -->
+    <section id="insights">
+        <div class="orb orb-1"></div>
+        <div class="wrap">
+            <div class="ins-header reveal">
+                <span class="s-label" data-i18n="insights-label">Por que Automação com IA</span>
+                <h2 class="s-title" data-i18n="insights-title">Os dados do mercado falam<br>por si mesmos</h2>
+                <p class="s-sub" data-i18n="insights-sub">Negócios de beleza e estética que adotam automação inteligente
+                    no atendimento colhem resultados expressivos e consistentes.</p>
+            </div>
+            <div class="ins-grid">
+                <article class="ins-card reveal">
+                    <div class="ins-big">&#8722;40%</div>
+                    <div class="ins-cat" data-i18n="ins-1-cat">Redução de No-show</div>
+                    <p class="ins-desc" data-i18n="ins-1-desc">Lembretes automáticos e personalizados via WhatsApp
+                        reduzem significativamente a taxa de ausência de clientes — e o prejuízo que vem com elas.
+                        Clínicas relatam resultados já no primeiro mês após a implantação.</p>
+                    <div class="ins-src" data-i18n="ins-1-src">Dado do setor &middot; Software Advice &amp; Capterra,
+                        2024</div>
+                </article>
+                <article class="ins-card reveal d1">
+                    <div class="ins-big">65%</div>
+                    <div class="ins-cat" data-i18n="ins-2-cat">Mais Conversão de Leads</div>
+                    <p class="ins-desc" data-i18n="ins-2-desc">Leads respondidos em menos de 1 minuto convertem até 65%
+                        mais do que atendimentos com delay de horas. A IA nunca demora — e isso faz toda a diferença
+                        quando o cliente está decidindo onde ir.</p>
+                    <div class="ins-src" data-i18n="ins-2-src">HubSpot Sales Research &amp; Lead Response Management
+                        Study</div>
+                </article>
+                <article class="ins-card reveal d2">
+                    <div class="ins-big">+30%</div>
+                    <div class="ins-cat" data-i18n="ins-3-cat">Em Receita Recorrente</div>
+                    <p class="ins-desc" data-i18n="ins-3-desc">Negócios que implementam comunicação automatizada, régua
+                        de relacionamento e reativação de inativos crescem receita recorrente em até 30% ao ano — sem
+                        contratar mais pessoas para atendimento.</p>
+                    <div class="ins-src" data-i18n="ins-3-src">Pesquisa de automação para micro e pequenas empresas
+                        &middot; Sebrae, 2024
+                    </div>
+                </article>
+            </div>
+            <div class="ins-callout reveal">
+                <div class="clt-pct">70%</div>
+                <div class="clt-body">
+                    <p class="clt-txt" data-i18n="ins-callout-txt">dos clientes do setor de beleza e estética preferem
+                        agendar e tirar dúvidas via WhatsApp — e não por telefone, e-mail ou aplicativo dedicado.</p>
+                    <p class="clt-src" data-i18n="clt-src">McKinsey Consumer Insights &amp; Pesquisa Digital Health,
+                        2024 — O canal que seus clientes já usam está esperando por automação.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section id="pricing">
+        <div class="orb orb-1"></div>
+        <div class="wrap">
+            <div class="pricing-header reveal">
+                <span class="s-label" data-i18n="pricing-label">Modelo de Planos</span>
+                <h2 class="s-title" data-i18n="pricing-title">Escolha o Agente de IA<br>ideal para o seu negócio</h2>
+            </div>
+            <p class="pricing-note reveal" data-i18n="pricing-note"><strong>Todos os planos incluem 1 número de WhatsApp
+                    e clientes e conversas ilimitados.</strong> Sem taxa por mensagem. Sem surpresas. &middot; 14 dias
+                grátis, sem cartão.</p>
+            <div class="billing-toggle-wrap">
+                <div class="billing-toggle">
+                    <button class="bill-btn active" id="bill-monthly" onclick="setBillingCycle('monthly')"
+                        data-i18n="bill-monthly">Mensal</button>
+                    <button class="bill-btn" id="bill-annual" onclick="setBillingCycle('annual')"
+                        data-i18n="bill-annual">Anual</button>
+                </div>
+                <span class="billing-save-badge" id="billing-save-badge" data-i18n="bill-save">💰 Economize 20%</span>
+            </div>
+            <div class="pricing-grid">
+
+                <!-- Starter -->
+                <div class="plan-card reveal">
+                    <div class="plan-tier" data-i18n="plan-tier-starter">Essencial</div>
+                    <div class="plan-price-row">
+                        <span class="plan-curr" id="curr-starter">R$</span>
+                        <span class="plan-amt" id="amt-starter">147</span>
+                    </div>
+                    <div class="plan-period" data-i18n="plan-starter-period">por mês &middot; cobrado mensalmente</div>
+                    <p class="plan-desc" data-i18n="plan-starter-desc">Para profissionais individuais e clínicas
+                        iniciantes que querem automatizar o
+                        atendimento e parar de perder leads fora do horário comercial.</p>
+                    <ul class="plan-feats">
+                        <li class="plan-feat">
+                            <div class="pf-chk"><svg viewBox="0 0 9 9">
+                                    <path d="M1.5 4.5l2 2.5L7.5 2" stroke-width="2" />
+                                </svg></div><span data-i18n="pf-starter-1">Agente de IA humanizado no WhatsApp</span>
+                        </li>
+                        <li class="plan-feat">
+                            <div class="pf-chk"><svg viewBox="0 0 9 9">
+                                    <path d="M1.5 4.5l2 2.5L7.5 2" stroke-width="2" />
+                                </svg></div><span data-i18n="pf-starter-2">1 número de WhatsApp</span>
+                        </li>
+                        <li class="plan-feat">
+                            <div class="pf-chk"><svg viewBox="0 0 9 9">
+                                    <path d="M1.5 4.5l2 2.5L7.5 2" stroke-width="2" />
+                                </svg></div><span data-i18n="pf-starter-3">Atendimento personalizado 24/7</span>
+                        </li>
+                        <li class="plan-feat">
+                            <div class="pf-chk"><svg viewBox="0 0 9 9">
+                                    <path d="M1.5 4.5l2 2.5L7.5 2" stroke-width="2" />
+                                </svg></div><span data-i18n="pf-starter-4">Agendamento via conversa</span>
+                        </li>
+
+                        <li class="plan-feat">
+                            <div class="pf-chk"><svg viewBox="0 0 9 9">
+                                    <path d="M1.5 4.5l2 2.5L7.5 2" stroke-width="2" />
+                                </svg></div><span data-i18n="pf-starter-6">Respostas às perguntas frequentes</span>
+                        </li>
+                        <li class="plan-feat">
+                            <div class="pf-chk"><svg viewBox="0 0 9 9">
+                                    <path d="M1.5 4.5l2 2.5L7.5 2" stroke-width="2" />
+                                </svg></div><span data-i18n="pf-starter-7">Clientes e conversas ilimitados</span>
+                        </li>
+                        <li class="plan-feat">
+                            <div class="pf-chk"><svg viewBox="0 0 9 9">
+                                    <path d="M1.5 4.5l2 2.5L7.5 2" stroke-width="2" />
+                                </svg></div><span data-i18n="pf-starter-8">Entregue totalmente configurado</span>
+                        </li>
+                        <li class="plan-feat">
+                            <div class="pf-chk"><svg viewBox="0 0 9 9">
+                                    <path d="M1.5 4.5l2 2.5L7.5 2" stroke-width="2" />
+                                </svg></div><span data-i18n="pf-starter-9">Suporte via chat</span>
+                        </li>
+                    </ul>
+                    <a href="#form-section" class="plan-cta outline" data-plan="Starter"
+                        data-i18n="plan-starter-cta">Quero o Starter</a>
+                </div>
+
+                <!-- Profissional -->
+                <div class="plan-card featured reveal d1">
+                    <div class="plan-badge" data-i18n="plan-badge">Mais Vendido</div>
+                    <div class="plan-tier" data-i18n="plan-tier-pro">Profissional</div>
+                    <div class="plan-price-row">
+                        <span class="plan-curr" id="curr-pro">R$</span>
+                        <span class="plan-amt" id="amt-pro">297</span>
+                    </div>
+                    <div class="plan-period" data-i18n="plan-pro-period">por mês &middot; cobrado mensalmente</div>
+                    <p class="plan-desc" data-i18n="plan-pro-desc">Para clínicas e salões que querem automação avançada,
+                        relacionamento
+                        inteligente e integração com a agenda — tudo em um só fluxo.</p>
+                    <ul class="plan-feats">
+                        <li class="plan-feat">
+                            <div class="pf-chk"><svg viewBox="0 0 9 9">
+                                    <path d="M1.5 4.5l2 2.5L7.5 2" stroke-width="2" />
+                                </svg></div><span data-i18n="pf-pro-1">Tudo do plano Essencial</span>
+                        </li>
+                        <li class="plan-feat">
+                            <div class="pf-chk"><svg viewBox="0 0 9 9">
+                                    <path d="M1.5 4.5l2 2.5L7.5 2" stroke-width="2" />
+                                </svg></div><span data-i18n="pf-starter-5">Confirmações e lembretes automáticos</span>
+                        </li>
+                        <li class="plan-feat">
+                            <div class="pf-chk"><svg viewBox="0 0 9 9">
+                                    <path d="M1.5 4.5l2 2.5L7.5 2" stroke-width="2" />
+                                </svg></div><span data-i18n="pf-pro-2">Agente com memória e contexto do cliente</span>
+                        </li>
+                        <li class="plan-feat">
+                            <div class="pf-chk"><svg viewBox="0 0 9 9">
+                                    <path d="M1.5 4.5l2 2.5L7.5 2" stroke-width="2" />
+                                </svg></div><span data-i18n="pf-pro-3">Régua de relacionamento completa</span>
+                        </li>
+                        <li class="plan-feat">
+                            <div class="pf-chk"><svg viewBox="0 0 9 9">
+                                    <path d="M1.5 4.5l2 2.5L7.5 2" stroke-width="2" />
+                                </svg></div><span data-i18n="pf-pro-4">Reativação automática de inativos</span>
+                        </li>
+
+                        <li class="plan-feat">
+                            <div class="pf-chk"><svg viewBox="0 0 9 9">
+                                    <path d="M1.5 4.5l2 2.5L7.5 2" stroke-width="2" />
+                                </svg></div><span data-i18n="pf-pro-6">Integração com Google Agenda</span>
+                        </li>
+                        <li class="plan-feat">
+                            <div class="pf-chk"><svg viewBox="0 0 9 9">
+                                    <path d="M1.5 4.5l2 2.5L7.5 2" stroke-width="2" />
+                                </svg></div><span data-i18n="pf-pro-7">Suporte prioritário</span>
+                        </li>
+                    </ul>
+                    <a href="#form-section" class="plan-cta solid" data-plan="Profissional"
+                        data-i18n="plan-pro-cta">Quero o Profissional</a>
+                </div>
+
+                <!-- Enterprise -->
+                <div class="plan-card reveal d2">
+                    <div class="plan-tier" data-i18n="plan-tier-ent">Exclusivo</div>
+                    <div class="plan-price-row">
+                        <span class="plan-curr" id="curr-ent">R$</span>
+                        <span class="plan-amt" id="amt-ent">497</span>
+                    </div>
+                    <div class="plan-period" data-i18n="plan-ent-period">por mês &middot; cobrado mensalmente</div>
+                    <p class="plan-desc" data-i18n="plan-ent-desc">Para negócios que precisam de automações customizadas
+                        para o nicho e integração
+                        com outros sistemas de agenda via API.</p>
+                    <ul class="plan-feats">
+                        <li class="plan-feat">
+                            <div class="pf-chk"><svg viewBox="0 0 9 9">
+                                    <path d="M1.5 4.5l2 2.5L7.5 2" stroke-width="2" />
+                                </svg></div><span data-i18n="pf-ent-1">Tudo do plano Profissional</span>
+                        </li>
+                        <li class="plan-feat">
+                            <div class="pf-chk"><svg viewBox="0 0 9 9">
+                                    <path d="M1.5 4.5l2 2.5L7.5 2" stroke-width="2" />
+                                </svg></div><span data-i18n="pf-pro-5">Relatório de conversas e leads</span>
+                        </li>
+                        <li class="plan-feat">
+                            <div class="pf-chk"><svg viewBox="0 0 9 9">
+                                    <path d="M1.5 4.5l2 2.5L7.5 2" stroke-width="2" />
+                                </svg></div><span data-i18n="pf-ent-2">Fluxos n8n customizados por nicho</span>
+                        </li>
+                        <li class="plan-feat">
+                            <div class="pf-chk"><svg viewBox="0 0 9 9">
+                                    <path d="M1.5 4.5l2 2.5L7.5 2" stroke-width="2" />
+                                </svg></div><span data-i18n="pf-ent-3">Integração via API com outros sistemas</span>
+                        </li>
+
+
+                        <li class="plan-feat">
+                            <div class="pf-chk"><svg viewBox="0 0 9 9">
+                                    <path d="M1.5 4.5l2 2.5L7.5 2" stroke-width="2" />
+                                </svg></div><span data-i18n="pf-ent-6">Configuração e onboarding premium</span>
+                        </li>
+                        <li class="plan-feat">
+                            <div class="pf-chk"><svg viewBox="0 0 9 9">
+                                    <path d="M1.5 4.5l2 2.5L7.5 2" stroke-width="2" />
+                                </svg></div><span data-i18n="pf-ent-7">SLA com resposta prioritária</span>
+                        </li>
+                    </ul>
+                    <a href="#form-section" class="plan-cta outline" data-plan="Enterprise"
+                        data-i18n="plan-ent-cta">Falar com a Equipe</a>
+                </div>
+
+            </div>
+            <p class="pricing-footer-note reveal" data-i18n="pricing-footer">Preços em USD disponíveis para clientes nos
+                EUA. &middot; <a href="#form-section">Não sabe qual plano escolher? Fale conosco.</a></p>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq">
+        <div class="wrap">
+            <div class="faq-header reveal">
+                <span class="s-label" data-i18n="faq-label">FAQ</span>
+                <h2 class="s-title" data-i18n="faq-title">Dúvidas frequentes</h2>
+            </div>
+            <div class="faq-list">
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+                        <span data-i18n="faq-1-q">O que é exatamente um Agente de IA com n8n?</span>
+                        <div class="faq-icon"><svg viewBox="0 0 13 13">
+                                <path d="M6.5 2v9M2 6.5h9" stroke-linecap="round" />
+                            </svg></div>
+                    </button>
+                    <div class="faq-a">
+                        <div class="faq-a-inner" data-i18n="faq-1-a">O Flow Agent é um sistema de automação inteligente
+                            construído na plataforma n8n — uma das ferramentas de automação mais poderosas do mercado.
+                            Ele combina fluxos automatizados com inteligência artificial para criar um "atendente
+                            virtual" que conversa de forma humanizada e personalizada via WhatsApp, agenda consultas,
+                            envia confirmações, nutre clientes e reativa inativos. Tudo configurado especificamente para
+                            o seu nicho, sem intervenção manual.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+                        <span data-i18n="faq-2-q">Preciso de conhecimento técnico para usar?</span>
+                        <div class="faq-icon"><svg viewBox="0 0 13 13">
+                                <path d="M6.5 2v9M2 6.5h9" stroke-linecap="round" />
+                            </svg></div>
+                    </button>
+                    <div class="faq-a">
+                        <div class="faq-a-inner" data-i18n="faq-2-a">Não. O Flow Agent é entregue totalmente configurado
+                            pela nossa equipe. Você não precisa entender de n8n, IA, código ou integração. Sua única
+                            responsabilidade é sincronizar o WhatsApp Business com o Agente — o que é feito via QR Code
+                            ou um código enviado direto para o seu WhatsApp, em menos de 5 minutos.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+                        <span data-i18n="faq-3-q">Quanto tempo leva para o Agente ficar ativo?</span>
+                        <div class="faq-icon"><svg viewBox="0 0 13 13">
+                                <path d="M6.5 2v9M2 6.5h9" stroke-linecap="round" />
+                            </svg></div>
+                    </button>
+                    <div class="faq-a">
+                        <div class="faq-a-inner" data-i18n="faq-3-a">Após a confirmação do pagamento, nossa equipe
+                            configura e entrega seu Agente de IA em até 5 dias úteis. O prazo pode variar de acordo com
+                            a complexidade do plano escolhido e das integrações necessárias. Após o recebimento, o
+                            processo de sincronização do WhatsApp leva menos de 5 minutos.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+                        <span data-i18n="faq-4-q">O atendimento do agente parece robótico ou é humanizado?</span>
+                        <div class="faq-icon"><svg viewBox="0 0 13 13">
+                                <path d="M6.5 2v9M2 6.5h9" stroke-linecap="round" />
+                            </svg></div>
+                    </button>
+                    <div class="faq-a">
+                        <div class="faq-a-inner" data-i18n="faq-4-a">O Flow Agent é configurado para se comunicar de
+                            forma humanizada e com a linguagem do seu nicho — usando o tom de voz que a sua marca adota,
+                            com saudações personalizadas, emojis no contexto certo e respostas que parecem escritas por
+                            um atendente real. O tempo médio de resposta é de ~15 segundos, o que contribui para a
+                            naturalidade da conversa.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+                        <span data-i18n="faq-5-q">Posso usar com o WhatsApp Business que já tenho?</span>
+                        <div class="faq-icon"><svg viewBox="0 0 13 13">
+                                <path d="M6.5 2v9M2 6.5h9" stroke-linecap="round" />
+                            </svg></div>
+                    </button>
+                    <div class="faq-a">
+                        <div class="faq-a-inner" data-i18n="faq-5-a">Sim. O Flow Agent se conecta ao seu número de
+                            WhatsApp Business atual via QR Code ou código de ativação. Não é necessário mudar de número
+                            ou criar uma nova conta. O processo é simples e preserva suas conversas e contatos
+                            existentes.</div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
+                        <span data-i18n="faq-6-q">Posso cancelar quando quiser? Há fidelidade ou multa?</span>
+                        <div class="faq-icon"><svg viewBox="0 0 13 13">
+                                <path d="M6.5 2v9M2 6.5h9" stroke-linecap="round" />
+                            </svg></div>
+                    </button>
+                    <div class="faq-a">
+                        <div class="faq-a-inner" data-i18n="faq-6-a">Sim, pode cancelar a qualquer momento sem multa ou
+                            taxa. Acreditamos que você ficará porque o Agente entrega resultado — não porque está preso.
+                            Em caso de cancelamento, você recebe o acesso a todos os seus dados de conversas e contatos
+                            para exportação em até 24 horas.</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FORM -->
+    <section id="form-section">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="wrap">
+            <div class="form-grid">
+                <div class="form-info reveal">
+                    <span class="s-label" data-i18n="form-label">Pronto para automatizar?</span>
+                    <h2 class="s-title" data-i18n="form-title">Solicite seu Agente<br>de IA <span
+                            style="color:var(--gold)">agora.</span></h2>
+                    <p class="s-sub" data-i18n="form-sub">Preencha o formulário e nossa equipe entra em contato em até
+                        72 horas para apresentar o Flow Agent personalizado para o seu modelo de negócio.</p>
+                    <div class="form-perks">
+                        <div class="perk">
+                            <div class="perk-dot"></div><span data-i18n="perk-1">Agente entregue totalmente configurado
+                                — você só ativa</span>
+                        </div>
+                        <div class="perk">
+                            <div class="perk-dot"></div><span data-i18n="perk-2">14 dias de teste grátis, sem
+                                necessidade de cartão de crédito</span>
+                        </div>
+                        <div class="perk">
+                            <div class="perk-dot"></div><span data-i18n="perk-3">Ativo em até 7 dias após a
+                                contratação</span>
+                        </div>
+                        <div class="perk">
+                            <div class="perk-dot"></div><span data-i18n="perk-4">Atendimento humanizado e personalizado
+                                para o seu nicho</span>
+                        </div>
+                        <div class="perk">
+                            <div class="perk-dot"></div><span data-i18n="perk-5">Cancele quando quiser, sem fidelidade
+                                ou multa</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="reveal d1">
+                    <div class="form-card">
+                        <h3 class="form-heading" data-i18n="form-heading">Solicitar demonstração</h3>
+                        <p class="form-subhead" data-i18n="form-subhead">Leva menos de 1 minuto. Nossa equipe retorna em
+                            até 72h.</p>
+                        <form id="lead-form" novalidate>
+                            <div class="fgroup">
+                                <label for="nome" data-i18n="label-nome">Nome completo</label>
+                                <input type="text" id="nome" name="nome" placeholder="Seu nome completo"
+                                    data-ph="ph-nome" autocomplete="name" required />
+                            </div>
+                            <div class="frow">
+                                <div class="fgroup">
+                                    <label for="email" data-i18n="label-email">E-mail</label>
+                                    <input type="email" id="email" name="email" placeholder="seu@email.com"
+                                        data-ph="ph-email" autocomplete="email" required />
+                                </div>
+                                <div class="fgroup">
+                                    <label for="whatsapp" data-i18n="label-whatsapp">WhatsApp / Telefone</label>
+                                    <input type="tel" id="whatsapp" name="whatsapp" placeholder="+55 11 9 0000-0000"
+                                        data-placeholder-pt="+55 11 9 0000-0000" data-placeholder-en="+1 (555) 000-0000"
+                                        autocomplete="tel" required />
+                                </div>
+                            </div>
+                            <div class="fgroup">
+                                <label for="tipo" data-i18n="label-tipo">Tipo de estabelecimento</label>
+                                <div class="sel-wrap">
+                                    <select id="tipo" name="tipo" required>
+                                        <option value="" disabled selected id="opt-tipo-0">Selecione o tipo</option>
+                                        <option value="barbearia" id="opt-tipo-1">Barbearia</option>
+                                        <option value="clinica" id="opt-tipo-2">Clínica</option>
+                                        <option value="estetica" id="opt-tipo-3">Estética</option>
+                                        <option value="salao" id="opt-tipo-4">Salão de Beleza</option>
+                                        <option value="outros" id="opt-tipo-5">Outros</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="frow">
+                                <div class="fgroup">
+                                    <label for="plano" data-i18n="label-plano">Tipo de plano</label>
+                                    <div class="sel-wrap">
+                                        <select id="plano" name="plano">
+                                            <option value="" selected id="opt-plano-0">Selecione um plano</option>
+                                            <option value="Starter" id="opt-starter">Essencial — R$ 147/mês</option>
+                                            <option value="Profissional" id="opt-pro">Profissional — R$ 297/mês</option>
+                                            <option value="Enterprise" id="opt-ent">Exclusivo — R$ 497/mês</option>
+                                            <option value="Ainda nao sei" id="opt-plano-ainda">Ainda não sei</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="fgroup">
+                                    <label for="pais" data-i18n="label-pais">País</label>
+                                    <div class="sel-wrap">
+                                        <select id="pais" name="pais" required>
+                                            <option value="" disabled selected id="opt-pais-0">Selecione</option>
+                                            <option value="br" id="opt-pais-1">Brasil</option>
+                                            <option value="us" id="opt-pais-2">Estados Unidos</option>
+                                            <option value="outros" id="opt-pais-3">Outros</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-submit" id="form-submit">
+                                <span data-i18n="form-submit">Quero meu Agente de IA grátis por 14 dias</span>
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.75"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </button>
+                        </form>
+                        <p class="form-legal"><span data-i18n="form-security">Seus dados estão protegidos.</span> <span
+                                data-i18n="consent-pre">Ao enviar você concorda com nossa</span> <a href="#"
+                                id="link-privacy" data-i18n="link-privacy">Política de Privacidade</a> <span
+                                data-i18n="consent-mid">e</span> <a href="#" id="link-terms"
+                                data-i18n="link-terms">Termos de Uso</a>. <span data-i18n="consent-post">Não fazemos
+                                spam.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="wrap">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <div class="logo-mark">
+                            <svg viewBox="0 0 20 20" fill="none">
+                                <!-- Antenna -->
+                                <line x1="10" y1="2" x2="10" y2="4.5" stroke="#2EC5A0" stroke-width="1.2"
+                                    stroke-linecap="round" />
+                                <circle cx="10" cy="1.5" r="1" fill="#2EC5A0" opacity=".9" />
+                                <!-- Head body -->
+                                <rect x="3.5" y="5" width="13" height="10" rx="3" fill="none" stroke="#2EC5A0"
+                                    stroke-width="1.3" opacity=".9" />
+                                <!-- Eyes -->
+                                <circle cx="7.5" cy="9.5" r="1.4" fill="#DFCA98" opacity=".95" />
+                                <circle cx="12.5" cy="9.5" r="1.4" fill="#DFCA98" opacity=".95" />
+                                <!-- Eye shine -->
+                                <circle cx="8" cy="9" r=".4" fill="white" opacity=".7" />
+                                <circle cx="13" cy="9" r=".4" fill="white" opacity=".7" />
+                                <!-- Mouth bar -->
+                                <rect x="7" y="12" width="6" height="1.2" rx=".6" fill="#2EC5A0" opacity=".7" />
+                            </svg>
+                        </div>
+                        <span><span class="logo-grad">Flow</span> Agent</span>
+                    </a>
+                    <p class="footer-tagline" data-i18n="footer-tagline">Agente de IA humanizado com n8n para automação
+                        de negócios de beleza e estética premium.</p>
+                    <div class="footer-socials">
+                        <a href="https://wa.me/5531994536050?text=Ol%C3%A1%21%20Quero%20ver%20como%20a%20IA%20de%20atendimento%20funciona%20e%20entender%20como%20ela%20pode%20automatizar%20os%20agendamentos%20do%20meu%20neg%C3%B3cio."
+                            id="wa-link-1" target="_blank" rel="noopener" class="soc-link" aria-label="WhatsApp">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                            </svg>
+                        </a>
+                        <a href="https://instagram.com/FlowAgent.app" target="_blank" rel="noopener" class="soc-link"
+                            aria-label="Instagram">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4c0 3.2-2.6 5.8-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8C2 4.6 4.6 2 7.8 2zm-.2 2A3.6 3.6 0 004 7.6v8.8A3.6 3.6 0 007.6 20h8.8a3.6 3.6 0 003.6-3.6V7.6A3.6 3.6 0 0016.4 4H7.6zm9.65 1.5a1.25 1.25 0 110 2.5 1.25 1.25 0 010-2.5zM12 7a5 5 0 110 10A5 5 0 0112 7zm0 2a3 3 0 100 6 3 3 0 000-6z" />
+                            </svg>
+                        </a>
+                        <a href="mailto:contato@flow-agent.app" class="soc-link" aria-label="E-mail">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                <polyline points="22,6 12,13 2,6" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <p class="fc-label" data-i18n="footer-col-nav">Produto</p>
+                    <ul class="fc-links">
+                        <li><a href="#features" data-i18n="footer-nav-1">Pilares do Agente</a></li>
+                        <li><a href="#pricing" data-i18n="footer-nav-2">Planos e Preços</a></li>
+                        <li><a href="#" data-i18n="footer-nav-3">Novidades</a></li>
+                        <li><a href="#how" data-i18n="footer-nav-4">Como Funciona</a></li>
+                        <li><a href="#faq" data-i18n="footer-nav-5">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <p class="fc-label" data-i18n="footer-col-contact">Contato</p>
+                    <ul class="fc-links">
+                        <li><a href="https://wa.me/5531994536050?text=Ol%C3%A1%21%20Quero%20ver%20como%20a%20IA%20de%20atendimento%20funciona%20e%20entender%20como%20ela%20pode%20automatizar%20os%20agendamentos%20do%20meu%20neg%C3%B3cio."
+                                id="wa-link-2" target="_blank" rel="noopener" data-i18n="footer-contact-1">(31)
+                                99453-6050</a></li>
+                        <li><a href="mailto:contato@flow-agent.app"
+                                data-i18n="footer-contact-2">contato@flow-agent.app</a></li>
+                        <li><a href="https://instagram.com/FlowAgent.app" target="_blank" rel="noopener"
+                                data-i18n="footer-contact-3">@FlowAgent.app</a></li>
+                        <li><a href="#form-section" data-i18n="footer-contact-4">Solicitar Demo</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="footer-copy" data-i18n="footer-copy">&copy; 2026 Flow Agent. Todos os direitos reservados.</p>
+                <div class="lang-toggle">
+                    <button class="lang-btn active" onclick="setLang('PT',this)">PT</button>
+                    <button class="lang-btn" onclick="setLang('EN',this)">EN</button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (function () {
+            'use strict';
+
+            // Sticky header
+            var header = document.getElementById('header');
+            window.addEventListener('scroll', function () {
+                header.classList.toggle('scrolled', window.scrollY > 60);
+            }, { passive: true });
+
+            // Mobile menu
+            var hamburger = document.getElementById('hamburger');
+            var mobileNav = document.getElementById('mobile-nav');
+            var closeBtn = document.getElementById('close-menu');
+
+            function openMenu() { mobileNav.classList.add('open'); document.body.style.overflow = 'hidden'; hamburger.setAttribute('aria-expanded', 'true'); }
+            function closeMobileMenu() { mobileNav.classList.remove('open'); document.body.style.overflow = ''; hamburger.setAttribute('aria-expanded', 'false'); }
+            window.closeMobileMenu = closeMobileMenu;
+
+            hamburger.addEventListener('click', openMenu);
+            closeBtn.addEventListener('click', closeMobileMenu);
+            mobileNav.addEventListener('click', function (e) { if (e.target === mobileNav) closeMobileMenu(); });
+            document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && mobileNav.classList.contains('open')) closeMobileMenu(); });
+            mobileNav.querySelectorAll('a').forEach(function (l) { l.addEventListener('click', closeMobileMenu); });
+
+            // Scroll reveal
+            var reveals = document.querySelectorAll('.reveal');
+            var revealObs = new IntersectionObserver(function (entries) {
+                entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); revealObs.unobserve(e.target); } });
+            }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+            reveals.forEach(function (el) { revealObs.observe(el); });
+
+            // FAQ accordion
+            window.toggleFaq = function (btn) {
+                var item = btn.closest('.faq-item');
+                var answer = item.querySelector('.faq-a');
+                var isOpen = item.classList.contains('open');
+                document.querySelectorAll('.faq-item').forEach(function (i) {
+                    i.classList.remove('open');
+                    i.querySelector('.faq-a').style.maxHeight = '0';
+                    i.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
+                });
+                if (!isOpen) {
+                    item.classList.add('open');
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                    btn.setAttribute('aria-expanded', 'true');
+                }
+            };
+
+            // "Solicitar Demo" nav CTA → pre-select "Ainda não sei" in form
+            var navDemoCta = document.getElementById('nav-demo-cta');
+            if (navDemoCta) {
+                navDemoCta.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var planSelect = document.getElementById('plano');
+                    if (planSelect) { planSelect.value = 'Ainda nao sei'; }
+                    var formSection = document.getElementById('form-section');
+                    if (formSection) { formSection.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+                });
+            }
+
+            // Plan pre-selection: clicking a plan CTA pre-fills the form selector
+            document.querySelectorAll('.plan-cta[data-plan]').forEach(function (btn) {
+                btn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var planName = this.getAttribute('data-plan');
+                    var planSelect = document.getElementById('plano');
+                    if (planSelect) { planSelect.value = planName; }
+                    var formSection = document.getElementById('form-section');
+                    if (formSection) { formSection.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+                });
+            });
+
+            // Form submit
+            var form = document.getElementById('lead-form');
+            var submitBtn = document.getElementById('form-submit');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                var valid = true;
+                form.querySelectorAll('[required]').forEach(function (f) {
+                    if (!f.value.trim()) { f.style.borderColor = 'rgba(220,70,70,.4)'; valid = false; }
+                    else { f.style.borderColor = ''; }
+                });
+                if (!valid) return;
+
+                // Collect form data for email/CRM integration
+                var nome = document.getElementById('nome').value;
+                var email = document.getElementById('email').value;
+                var tel = document.getElementById('whatsapp').value;
+                var tipo = document.getElementById('tipo').value;
+                var plano = document.getElementById('plano').value;
+                var pais = document.getElementById('pais').value;
+
+                // Send to mailto (fallback — replace with Formspree/n8n webhook in production)
+                var subject = encodeURIComponent('Flow Agent — Nova solicitação de demo: ' + nome);
+                var body = encodeURIComponent(
+                    'Nome: ' + nome + '\\n' +
+                    'E-mail: ' + email + '\\n' +
+                    'WhatsApp: ' + tel + '\\n' +
+                    'Tipo: ' + tipo + '\\n' +
+                    'Plano: ' + plano + '\\n' +
+                    'País: ' + pais
+                );
+                window.location.href = 'mailto:contato@flow-agent.app?subject=' + subject + '&body=' + body;
+
+                submitBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8l3 3.5L13 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Solicitação enviada! Retornamos em até 72h.';
+                submitBtn.disabled = true;
+                submitBtn.style.background = 'linear-gradient(135deg, #2EC5A0, #1AA880)';
+            });
+
+            // Language toggle — i18n PT/EN
+            var i18n = {
+                PT: {
+                    'nav-features': 'Pilares',
+                    'nav-how': 'Como Funciona',
+                    'nav-insights': 'Por que IA',
+                    'nav-pricing': 'Planos',
+                    'nav-faq': 'FAQ',
+                    'nav-cta': 'Solicitar Demo',
+                    'hero-eyebrow': 'Agente de IA humanizado com n8n · Beleza e Estética Premium',
+                    'hero-h1': 'Automação com IA<br>para o <span class="gold">fluxo</span><br>do seu negócio.',
+                    'hero-slogan': 'Inteligência automatizada para o fluxo do seu negócio.',
+                    'hero-sub': 'Flow Agent é um Agente de IA construído com n8n que atende seus clientes de forma <strong style="color:var(--t1)">humanizada e personalizada</strong> para o seu nicho — agendando, confirmando e fidelizando via WhatsApp 24 horas por dia. Entregue totalmente configurado e pronto para usar.',
+                    'hero-cta-primary': 'Solicitar meu Agente de IA',
+                    'hero-cta-secondary': 'Ver como funciona',
+                    'stat-1-label': 'Disponível, sem<br>pausas ou folgas',
+                    'stat-2-label': 'Tempo médio<br>de resposta',
+                    'stat-3-label': 'Ativo após<br>a contratação',
+                    'stat-4-label': 'Grátis para<br>testar',
+                    'pricing-label': 'Modelo de Planos',
+                    'pricing-title': 'Escolha o Agente de IA<br>ideal para o seu negócio',
+                    'pricing-note': '<strong>Todos os planos incluem 1 número de WhatsApp e clientes e conversas ilimitados.</strong> Sem taxa por mensagem. Sem surpresas. · 14 dias grátis, sem cartão.',
+                    'pricing-footer': 'Preços em USD disponíveis para clientes nos EUA. · <a href="#form-section">Não sabe qual plano escolher? Fale conosco.</a>',
+                    'plan-starter-period': 'por mês · cobrado mensalmente',
+                    'plan-starter-desc': 'Para profissionais individuais e clínicas iniciantes que querem automatizar o atendimento e parar de perder leads fora do horário comercial.',
+                    'plan-starter-cta': 'Quero o Starter',
+                    'plan-pro-period': 'por mês · cobrado mensalmente',
+                    'plan-pro-desc': 'Para clínicas e salões que querem automação avançada, relacionamento inteligente e integração com a agenda — tudo em um só fluxo.',
+                    'plan-pro-cta': 'Quero o Profissional',
+                    'plan-ent-period': 'por mês · cobrado mensalmente',
+                    'plan-ent-desc': 'Para negócios que precisam de automações customizadas para o nicho e integração com outros sistemas de agenda via API.',
+                    'plan-ent-cta': 'Falar com a Equipe',
+                    'form-label': 'Pronto para automatizar?',
+                    'form-title': 'Solicite seu Agente<br>de IA <span style="color:var(--gold)">agora.</span>',
+                    'form-sub': 'Preencha o formulário e nossa equipe entra em contato em até 72 horas para apresentar o Flow Agent personalizado para o seu modelo de negócio.',
+                    'form-heading': 'Solicitar demonstração',
+                    'form-subhead': 'Leva menos de 1 minuto. Nossa equipe retorna em até 72h.',
+                    'form-submit': 'Quero meu Agente de IA grátis por 14 dias',
+                    'footer-tagline': 'Agente de IA humanizado com n8n para automação de negócios de beleza e estética premium.',
+                    'footer-copy': '© 2026 Flow Agent. Todos os direitos reservados.',
+                    'footer-col-nav': 'Produto',
+                    'footer-col-contact': 'Contato',
+                    'footer-nav-1': 'Pilares do Agente',
+                    'footer-nav-2': 'Planos e Preços',
+                    'footer-nav-3': 'Novidades',
+                    'footer-nav-4': 'Como Funciona',
+                    'footer-nav-5': 'FAQ',
+                    'footer-contact-1': '(31) 99453-6050',
+                    'footer-contact-2': 'contato@flow-agent.app',
+                    'footer-contact-3': '@FlowAgent.app',
+                    'footer-contact-4': 'Solicitar Demo',
+                    'select-tipo-placeholder': 'Selecione o tipo',
+                    'select-plano-placeholder': 'Selecione um plano',
+                    'select-pais-placeholder': 'Selecione',
+                    'label-nome': 'Nome completo',
+                    'label-email': 'E-mail',
+                    'label-whatsapp': 'WhatsApp / Telefone',
+                    'label-tipo': 'Tipo de estabelecimento',
+                    'label-plano': 'Tipo de plano',
+                    'label-pais': 'País',
+                    'proof-label': 'n8n • OpenAI • WhatsApp • Cal.com • Google Agenda',
+                    'plan-badge': 'Mais Vendido',
+                    'plan-starter-feat-1': 'Agente de IA humanizado no WhatsApp',
+                    'plan-starter-feat-2': '1 número de WhatsApp',
+                    'plan-starter-feat-3': 'Atendimento personalizado 24/7',
+                    'plan-starter-feat-4': 'Agendamento via conversa',
+                    'plan-starter-feat-5': 'Confirmações e lembretes automáticos',
+                    'plan-starter-feat-6': 'Respostas às perguntas frequentes',
+                    'plan-starter-feat-7': 'Clientes e conversas ilimitados',
+                    'plan-starter-feat-8': 'Entregue totalmente configurado',
+                    'plan-starter-feat-9': 'Suporte via chat',
+                    'perk-1': 'Agente entregue totalmente configurado — você só ativa',
+                    'perk-2': '14 dias de teste grátis, sem necessidade de cartão de crédito',
+                    'perk-3': 'Ativo em até 7 dias após a contratação',
+                    'perk-4': 'Atendimento humanizado e personalizado para o seu nicho',
+                    'perk-5': 'Cancele quando quiser, sem fidelidade ou multa',
+                    'stat-days': 'dias',
+                    'dm-ativo': 'Ativo',
+                    'bill-monthly': 'Mensal',
+                    'bill-annual': 'Anual',
+                    'bill-save': '💰 Economize 20%',
+                    // ── hero chat mock ──
+                    'dm-title': 'Flow Agent · Agente WhatsApp',
+                    'dm-online': 'online agora',
+                    'dm-ftag-1': 'Agendamento criado',
+                    'dm-ftag-2': 'Lembrete programado',
+                    'dm-ftag-3': 'Histórico atualizado',
+                    'dmm-l-1': 'on-line',
+                    'dmm-l-2': 'agenda hoje',
+                    'dmm-l-3': 'sem resposta',
+                    // ── form ──
+                    'opt-plano-0': 'Selecione um plano',
+                    'form-security': 'Seus dados estão protegidos.',
+                    // ── how step 1 ──
+                    'how-1-badge': 'Comece agora',
+                    // ── proof bar ──
+                    'proof-text': 'Capacidades comprovadas pelo mercado',
+                    'ps-label-1': 'Redução de no-show',
+                    'ps-label-2': 'Mais conversão de leads',
+                    'ps-label-3': 'Resposta humanizada',
+                    'ps-label-4': 'Leads perdidos fora do horário',
+                    // ── vs-before bullets ──
+                    'vs-b-1': 'Leads chegam fora do horário e ficam sem resposta por horas — e vão para o concorrente',
+                    'vs-b-2': 'Equipe gasta horas por dia respondendo WhatsApp em vez de atender clientes presencialmente',
+                    'vs-b-3': 'Confirmações de agendamento manuais resultam em alta taxa de no-show e prejuízo financeiro',
+                    'vs-b-4': 'Clientes inativos sumindo sem que ninguém perceba ou faça algo para recuperá-los',
+                    'vs-b-5': 'Zero visibilidade sobre quantos leads foram perdidos ou por que clientes pararam de voltar',
+                    // ── vs-after bullets ──
+                    'vs-a-1': 'IA humanizada responde leads 24/7 em ~15s — com linguagem personalizada para o seu nicho',
+                    'vs-a-2': 'Agendamentos feitos automaticamente via conversa natural no WhatsApp, sem intervenção manual',
+                    'vs-a-3': 'Confirmações e lembretes automáticos reduzem no-show em até 40% já no primeiro mês',
+                    'vs-a-4': 'Régua de reativação automática identifica clientes inativos e os traz de volta com a oferta certa',
+                    'vs-a-5': 'Relatório de conversas e leads mostra oportunidades em aberto e histórico de atendimento',
+                    // ── hero chat bubbles ──
+                    'bubble-1': 'Oi! Quero agendar uma limpeza de pele para esta semana 😊',
+                    'bubble-2': 'Olá! Temos horários disponíveis para limpeza de pele:',
+                    'bubble-3': '📅 Terça, 14h · Quinta, 10h · Sexta, 16h30',
+                    'bubble-4': 'Terça às 14h, por favor!',
+                    'bubble-5': '✅ Perfeito! Agendado para terça, 14h. Enviarei um lembrete antes, tá bem? 🗓️',
+                    // ── form selects & consent ──
+                    'opt-tipo-0': 'Selecione o tipo',
+                    'opt-tipo-1': 'Barbearia',
+                    'opt-tipo-2': 'Clínica',
+                    'opt-tipo-3': 'Estética',
+                    'opt-tipo-4': 'Salão de Beleza',
+                    'opt-tipo-5': 'Outros',
+                    'opt-pais-0': 'Selecione',
+                    'opt-pais-1': 'Brasil',
+                    'opt-pais-2': 'Estados Unidos',
+                    'opt-pais-3': 'Outros',
+                    'opt-plano-ainda': 'Ainda não sei',
+                    'consent-pre': 'Ao enviar você concorda com nossa',
+                    'consent-mid': 'e',
+                    'consent-post': 'Não fazemos spam.',
+                    'link-privacy': 'Política de Privacidade',
+                    'link-terms': 'Termos de Uso',
+                    'ph-nome': 'Seu nome completo',
+                    'ph-email': 'seu@email.com',
+                    // ── plan tiers ──
+                    'plan-tier-starter': 'Essencial',
+                    'plan-tier-pro': 'Profissional',
+                    'plan-tier-ent': 'Exclusivo',
+                    // ── plan features starter ──
+                    'pf-starter-1': 'Agente de IA humanizado no WhatsApp',
+                    'pf-starter-2': '1 número de WhatsApp',
+                    'pf-starter-3': 'Atendimento personalizado 24/7',
+                    'pf-starter-4': 'Agendamento via conversa',
+                    'pf-starter-5': 'Confirmações e lembretes automáticos',
+                    'pf-starter-6': 'Respostas às perguntas frequentes',
+                    'pf-starter-7': 'Clientes e conversas ilimitados',
+                    'pf-starter-8': 'Entregue totalmente configurado',
+                    'pf-starter-9': 'Suporte via chat',
+                    // ── plan features pro ──
+                    'pf-pro-1': 'Tudo do plano Essencial',
+                    'pf-pro-2': 'Agente com memória e contexto do cliente',
+                    'pf-pro-3': 'Régua de relacionamento completa',
+                    'pf-pro-4': 'Reativação automática de inativos',
+                    'pf-pro-5': 'Relatório de conversas e leads',
+                    'pf-pro-6': 'Integração com Google Agenda',
+                    'pf-pro-7': 'Suporte prioritário',
+                    // ── plan features enterprise ──
+                    'pf-ent-1': 'Tudo do plano Profissional',
+                    'pf-ent-2': 'Fluxos n8n customizados por nicho',
+                    'pf-ent-3': 'Integração via API com outros sistemas',
+                    'pf-ent-4': 'Fluxos avançados de qualificação e vendas',
+                    'pf-ent-5': 'Atualizações de fluxos incluídas',
+                    'pf-ent-6': 'Configuração e onboarding premium',
+                    'pf-ent-7': 'SLA com resposta prioritária',
+                    // ── insights sources ──
+                    'ins-1-src': 'Dado do setor · Software Advice & Capterra, 2024',
+                    'ins-2-src': 'HubSpot Sales Research & Lead Response Management Study',
+                    'ins-3-src': 'Pesquisa de automação para micro e pequenas empresas · Sebrae, 2024',
+                    'clt-src': 'McKinsey Consumer Insights & Pesquisa Digital Health, 2024 — O canal que seus clientes já usam está esperando por automação.',
+
+                    // ── problem ──
+                    'problem-label': 'O Diagnóstico',
+                    'problem-title': 'O que acontece quando seu<br>WhatsApp não tem inteligência',
+                    'problem-sub': 'Clínicas e salões de alto padrão perdem clientes e receita todos os dias por falta de automação no atendimento. Isso tem solução.',
+                    'vs-before-flag': 'Sem o Flow Agent',
+                    'vs-before-quote': '"Quando chego de manhã, já tenho 20 mensagens não respondidas — metade são clientes que desistiram."',
+                    'vs-after-flag': 'Com o Flow Agent',
+                    'vs-after-quote': '"O Agente responde como se fosse eu — de forma personalizada — agenda, confirma e fideliza os clientes."',
+                    // ── features ──
+                    'features-label': 'Pilares do Agente',
+                    'features-title': 'Cinco automações que<br>transformam sua operação',
+                    'features-sub': 'Cada pilar é um fluxo n8n configurado e personalizado para o seu nicho — entregue pronto para usar, sem você precisar tocar em código.',
+                    'feat-1-title': 'Atendimento Humanizado 24/7',
+                    'feat-1-desc': 'IA que conversa de forma personalizada e natural, nunca deixa mensagem sem resposta e qualifica leads — mesmo às 3h da manhã.',
+                    'feat-2-title': 'Agendamento Automatizado por IA',
+                    'feat-2-desc': 'Cliente pede, agente verifica disponibilidade, confirma e registra — sem nenhuma intervenção manual da sua equipe.',
+                    'feat-3-title': 'Régua de Relacionamento Automática',
+                    'feat-3-desc': 'Confirmação, lembrete pré-consulta, pesquisa pós-atendimento e follow-up de retorno — tudo no piloto automático.',
+                    'feat-4-title': 'Reativação Inteligente de Inativos',
+                    'feat-4-desc': 'IA identifica clientes sumidos há 30, 60 ou 90 dias e dispara mensagens personalizadas com a oferta certa na hora certa.',
+                    'feat-5-title': 'Relatório de Conversas e Leads',
+                    'feat-5-desc': 'Histórico de conversas, leads qualificados e status de atendimento — para você acompanhar o desempenho do agente.',
+                    // ── how ──
+                    'how-label': 'Como Funciona',
+                    'how-title': 'Entregue configurado.<br>Ativo em até 7 dias.',
+                    'how-sub': 'Você não precisa entender de tecnologia, n8n ou IA. Cuidamos de tudo — você só precisa sincronizar o WhatsApp.',
+                    'how-1-title': 'Escolha seu plano',
+                    'how-1-desc': 'Selecione o plano ideal para o seu negócio. Após a confirmação do pagamento, nossa equipe entrará em contato para iniciar a integração.',
+                    'how-2-title': 'Receba seu Agente pronto',
+                    'how-2-desc': 'Configuramos todos os fluxos n8n, o Agente de IA e as integrações do plano. Você recebe tudo funcionando — zero configuração manual.',
+                    'how-2-badge': 'Entregue em 7 dias',
+                    'how-3-title': 'Ative via WhatsApp',
+                    'how-3-desc': 'Sincronize seu WhatsApp Business com o Agente escaneando o QR Code ou digitando o código enviado para o seu WhatsApp.',
+                    'how-3-badge': 'QR Code ou código',
+                    'how-4-title': 'Conecte suas ferramentas',
+                    'how-4-desc': 'A depender do plano, forneça acesso às APIs do seu sistema de agenda ou calendário. Temos guia passo a passo ou fazemos por você.',
+                    'how-4-badge': 'Opcional por plano',
+                    // ── insights ──
+                    'insights-label': 'Por que Automação com IA',
+                    'insights-title': 'Os dados do mercado falam<br>por si mesmos',
+                    'insights-sub': 'Negócios de beleza e estética que adotam automação inteligente no atendimento colhem resultados expressivos e consistentes.',
+                    'ins-1-cat': 'Redução de No-show',
+                    'ins-1-desc': 'Lembretes automáticos e personalizados via WhatsApp reduzem significativamente a taxa de ausência de clientes — e o prejuízo que vem com elas. Clínicas relatam resultados já no primeiro mês após a implantação.',
+                    'ins-2-cat': 'Mais Conversão de Leads',
+                    'ins-2-desc': 'Leads respondidos em menos de 1 minuto convertem até 65% mais do que atendimentos com delay de horas. A IA nunca demora — e isso faz toda a diferença quando o cliente está decidindo onde ir.',
+                    'ins-3-cat': 'Em Receita Recorrente',
+                    'ins-3-desc': 'Negócios que implementam comunicação automatizada, régua de relacionamento e reativação de inativos crescem receita recorrente em até 30% ao ano — sem contratar mais pessoas para atendimento.',
+                    'ins-callout-txt': 'dos clientes do setor de beleza e estética preferem agendar e tirar dúvidas via WhatsApp — e não por telefone, e-mail ou aplicativo dedicado.',
+                    // ── faq ──
+                    'faq-label': 'FAQ',
+                    'faq-title': 'Dúvidas frequentes',
+                    'faq-1-q': 'O que é exatamente um Agente de IA com n8n?',
+                    'faq-1-a': 'O Flow Agent é um sistema de automação inteligente construído na plataforma n8n — uma das ferramentas de automação mais poderosas do mercado. Ele combina fluxos automatizados com inteligência artificial para criar um "atendente virtual" que conversa de forma humanizada e personalizada via WhatsApp, agenda consultas, envia confirmações, nutre clientes e reativa inativos. Tudo configurado especificamente para o seu nicho, sem intervenção manual.',
+                    'faq-2-q': 'Preciso de conhecimento técnico para usar?',
+                    'faq-2-a': 'Não. O Flow Agent é entregue totalmente configurado pela nossa equipe. Você não precisa entender de n8n, IA, código ou integração. Sua única responsabilidade é sincronizar o WhatsApp Business com o Agente — o que é feito via QR Code ou um código enviado direto para o seu WhatsApp, em menos de 5 minutos.',
+                    'faq-3-q': 'Quanto tempo leva para o Agente ficar ativo?',
+                    'faq-3-a': 'Após a confirmação do pagamento, nossa equipe configura e entrega seu Agente de IA em até 7 dias. O prazo pode variar de acordo com a complexidade do plano escolhido e das integrações necessárias. Após o recebimento, o processo de sincronização do WhatsApp leva menos de 5 minutos.',
+                    'faq-4-q': 'O atendimento do agente parece robótico ou é humanizado?',
+                    'faq-4-a': 'O Flow Agent é configurado para se comunicar de forma humanizada e com a linguagem do seu nicho — usando o tom de voz que a sua marca adota, com saudações personalizadas, emojis no contexto certo e respostas que parecem escritas por um atendente real. O tempo médio de resposta é de ~15 segundos, o que contribui para a naturalidade da conversa.',
+                    'faq-5-q': 'Posso usar com o WhatsApp Business que já tenho?',
+                    'faq-5-a': 'Sim. O Flow Agent se conecta ao seu número de WhatsApp Business atual via QR Code ou código de ativação. Não é necessário mudar de número ou criar uma nova conta. O processo é simples e preserva suas conversas e contatos existentes.',
+                    'faq-6-q': 'Posso cancelar quando quiser? Há fidelidade ou multa?',
+                    'faq-6-a': 'Sim, pode cancelar a qualquer momento sem multa ou taxa. Acreditamos que você ficará porque o Agente entrega resultado — não porque está preso. Em caso de cancelamento, você recebe o acesso a todos os seus dados de conversas e contatos para exportação em até 24 horas.',
+                    // ── mobile nav ──
+                    'mn-cta-plans': 'Ver planos e preços',
+                },
+                EN: {
+                    'nav-features': 'Features',
+                    'nav-how': 'How It Works',
+                    'nav-insights': 'Why AI',
+                    'nav-pricing': 'Pricing',
+                    'nav-faq': 'FAQ',
+                    'nav-cta': 'Request Demo',
+                    'hero-eyebrow': 'Humanized AI Agent with n8n · Beauty & Premium Aesthetics',
+                    'hero-h1': 'AI Automation for the <span class="gold">flow</span><br>of your business.',
+                    'hero-slogan': 'Automated intelligence for your business flow.',
+                    'hero-sub': 'Flow Agent is an AI Agent built with n8n that serves your clients in a <strong style="color:var(--t1)">humanized and personalized way</strong> for your niche — scheduling, confirming and retaining via WhatsApp 24 hours a day. Delivered fully configured and ready to use.',
+                    'hero-cta-primary': 'Request my AI Agent',
+                    'hero-cta-secondary': 'See how it works',
+                    'stat-1-label': 'Available, without<br>breaks or days off',
+                    'stat-2-label': 'Average response<br>time',
+                    'stat-3-label': 'Active after<br>contracting',
+                    'stat-4-label': 'Free to<br>try',
+                    'pricing-label': 'Pricing Plans',
+                    'pricing-title': 'Choose the AI Agent<br>right for your business',
+                    'pricing-note': '<strong>All plans include 1 WhatsApp number and unlimited clients and conversations.</strong> No per-message fee. No surprises. · 14 days free, no card required.',
+                    'pricing-footer': 'USD pricing available for US customers. · <a href="#form-section">Not sure which plan? Talk to us.</a>',
+                    'plan-starter-period': 'per month · billed monthly',
+                    'plan-starter-desc': 'For solo professionals and starter clinics who want to automate customer service and stop losing leads outside business hours.',
+                    'plan-starter-cta': 'Get Starter',
+                    'plan-pro-period': 'per month · billed monthly',
+                    'plan-pro-desc': 'For clinics and salons that want advanced automation, smart relationship management and calendar integration — all in one flow.',
+                    'plan-pro-cta': 'Get Professional',
+                    'plan-ent-period': 'per month · billed monthly',
+                    'plan-ent-desc': 'For businesses that need niche-customized automation and integration with other scheduling systems via API.',
+                    'plan-ent-cta': 'Talk to the Team',
+                    'form-label': 'Ready to automate?',
+                    'form-title': 'Request your AI Agent<br><span style="color:var(--gold)">now.</span>',
+                    'form-sub': 'Fill out the form and our team will reach out within 72 hours to present a Flow Agent tailored to your business model.',
+                    'form-heading': 'Request a demo',
+                    'form-subhead': 'Takes less than 1 minute. Our team will get back to you within 72h.',
+                    'form-submit': 'Get my AI Agent free for 14 days',
+                    'footer-tagline': 'Humanized AI Agent with n8n for beauty and premium aesthetics business automation.',
+                    'footer-copy': '© 2026 Flow Agent. All rights reserved.',
+                    'footer-col-nav': 'Product',
+                    'footer-col-contact': 'Contact',
+                    'footer-nav-1': 'Agent Features',
+                    'footer-nav-2': 'Plans & Pricing',
+                    'footer-nav-3': 'Updates',
+                    'footer-nav-4': 'How It Works',
+                    'footer-nav-5': 'FAQ',
+                    'footer-contact-1': '+55 31 99453-6050',
+                    'footer-contact-2': 'contato@flow-agent.app',
+                    'footer-contact-3': '@FlowAgent.app',
+                    'footer-contact-4': 'Request Demo',
+                    'select-tipo-placeholder': 'Select type',
+                    'select-plano-placeholder': 'Select a plan',
+                    'select-pais-placeholder': 'Select',
+                    'label-nome': 'Full name',
+                    'label-email': 'E-mail',
+                    'label-whatsapp': 'WhatsApp / Phone',
+                    'label-tipo': 'Business type',
+                    'label-plano': 'Plan type',
+                    'label-pais': 'Country',
+                    'proof-label': 'n8n • OpenAI • WhatsApp • Cal.com • Google Calendar',
+                    'plan-badge': 'Best Seller',
+                    'plan-starter-feat-1': 'Humanized AI Agent on WhatsApp',
+                    'plan-starter-feat-2': '1 WhatsApp number',
+                    'plan-starter-feat-3': 'Personalized 24/7 service',
+                    'plan-starter-feat-4': 'Conversational scheduling',
+                    'plan-starter-feat-5': 'Automatic confirmations & reminders',
+                    'plan-starter-feat-6': 'FAQ responses',
+                    'plan-starter-feat-7': 'Unlimited clients & conversations',
+                    'plan-starter-feat-8': 'Delivered fully configured',
+                    'plan-starter-feat-9': 'Chat support',
+                    'perk-1': 'Agent delivered fully configured — you just activate it',
+                    'perk-2': '14-day free trial, no credit card required',
+                    'perk-3': 'Active within 7 days after contracting',
+                    'perk-4': 'Humanized and personalized service for your niche',
+                    'perk-5': 'Cancel anytime, no commitment or penalties',
+                    'stat-days': 'days',
+                    'dm-ativo': 'Active',
+                    'bill-monthly': 'Monthly',
+                    'bill-annual': 'Annual',
+                    'bill-save': '💰 Save 20%',
+                    // ── hero chat mock ──
+                    'dm-title': 'Flow Agent · WhatsApp Agent',
+                    'dm-online': 'online now',
+                    'dm-ftag-1': 'Appointment created',
+                    'dm-ftag-2': 'Reminder scheduled',
+                    'dm-ftag-3': 'History updated',
+                    'dmm-l-1': 'online',
+                    'dmm-l-2': 'scheduled today',
+                    'dmm-l-3': 'no reply',
+                    // ── form ──
+                    'opt-plano-0': 'Select a plan',
+                    'form-security': 'Your data is protected.',
+                    // ── how step 1 ──
+                    'how-1-badge': 'Get started now',
+                    // ── proof bar ──
+                    'proof-text': 'Market-proven capabilities',
+                    'ps-label-1': 'No-show reduction',
+                    'ps-label-2': 'More lead conversion',
+                    'ps-label-3': 'Humanized response',
+                    'ps-label-4': 'Leads lost after hours',
+                    // ── vs-before bullets ──
+                    'vs-b-1': 'Leads arrive after hours and go unanswered for hours — and go to a competitor',
+                    'vs-b-2': 'Team spends hours daily responding to WhatsApp instead of serving in-person clients',
+                    'vs-b-3': 'Manual appointment confirmations result in high no-show rates and financial loss',
+                    'vs-b-4': 'Inactive clients disappearing without anyone noticing or doing anything to recover them',
+                    'vs-b-5': 'Zero visibility on how many leads were lost or why clients stopped coming back',
+                    // ── vs-after bullets ──
+                    'vs-a-1': 'Humanized AI responds to leads 24/7 in ~15s — with language personalized for your niche',
+                    'vs-a-2': 'Appointments made automatically via natural WhatsApp conversation, no manual intervention',
+                    'vs-a-3': 'Automatic confirmations & reminders reduce no-shows by up to 40% in the first month',
+                    'vs-a-4': 'Automatic reactivation sequence identifies inactive clients and brings them back with the right offer',
+                    'vs-a-5': 'Conversations & leads report shows open opportunities and service history',
+                    // ── hero chat bubbles ──
+                    'bubble-1': 'Hi! I\'d like to schedule a facial for this week 😊',
+                    'bubble-2': 'Hello! We have available slots for facials:',
+                    'bubble-3': '📅 Tuesday, 2pm · Thursday, 10am · Friday, 4:30pm',
+                    'bubble-4': 'Tuesday at 2pm, please!',
+                    'bubble-5': '✅ Perfect! Booked for Tuesday, 2pm. I\'ll send a reminder beforehand, ok? 🗓️',
+                    // ── form selects & consent ──
+                    'opt-tipo-0': 'Select type',
+                    'opt-tipo-1': 'Barbershop',
+                    'opt-tipo-2': 'Clinic',
+                    'opt-tipo-3': 'Aesthetics',
+                    'opt-tipo-4': 'Beauty Salon',
+                    'opt-tipo-5': 'Other',
+                    'opt-pais-0': 'Select',
+                    'opt-pais-1': 'Brazil',
+                    'opt-pais-2': 'United States',
+                    'opt-pais-3': 'Other',
+                    'opt-plano-ainda': 'Not sure yet',
+                    'consent-pre': 'By submitting you agree to our',
+                    'consent-mid': 'and',
+                    'consent-post': 'We don\'t spam.',
+                    'link-privacy': 'Privacy Policy',
+                    'link-terms': 'Terms of Service',
+                    'ph-nome': 'Your full name',
+                    'ph-email': 'your@email.com',
+                    // ── plan tiers ──
+                    'plan-tier-starter': 'Essential',
+                    'plan-tier-pro': 'Professional',
+                    'plan-tier-ent': 'Exclusive',
+                    // ── plan features starter ──
+                    'pf-starter-1': 'Humanized AI Agent on WhatsApp',
+                    'pf-starter-2': '1 WhatsApp number',
+                    'pf-starter-3': 'Personalized 24/7 service',
+                    'pf-starter-4': 'Conversational scheduling',
+                    'pf-starter-5': 'Automatic confirmations & reminders',
+                    'pf-starter-6': 'FAQ responses',
+                    'pf-starter-7': 'Unlimited clients & conversations',
+                    'pf-starter-8': 'Delivered fully configured',
+                    'pf-starter-9': 'Chat support',
+                    // ── plan features pro ──
+                    'pf-pro-1': 'Everything in Essential',
+                    'pf-pro-2': 'Agent with client memory & context',
+                    'pf-pro-3': 'Full relationship sequence',
+                    'pf-pro-4': 'Automatic inactive reactivation',
+                    'pf-pro-5': 'Conversations & leads report',
+                    'pf-pro-6': 'Google Calendar integration',
+                    'pf-pro-7': 'Priority support',
+                    // ── plan features enterprise ──
+                    'pf-ent-1': 'Everything in Professional',
+                    'pf-ent-2': 'Niche-customized n8n flows',
+                    'pf-ent-3': 'API integration with other systems',
+                    'pf-ent-4': 'Advanced qualification & sales flows',
+                    'pf-ent-5': 'Flow updates included',
+                    'pf-ent-6': 'Premium configuration & onboarding',
+                    'pf-ent-7': 'SLA with priority response',
+                    // ── insights sources ──
+                    'ins-1-src': 'Industry data · Software Advice & Capterra, 2024',
+                    'ins-2-src': 'HubSpot Sales Research & Lead Response Management Study',
+                    'ins-3-src': 'Automation research for micro & small businesses · Sebrae, 2024',
+                    'clt-src': 'McKinsey Consumer Insights & Digital Health Research, 2024 — The channel your clients already use is waiting for automation.',
+
+                    // ── problem ──
+                    'problem-label': 'The Diagnosis',
+                    'problem-title': 'What happens when your<br>WhatsApp has no intelligence',
+                    'problem-sub': 'High-end clinics and salons lose clients and revenue every day due to lack of automation in their service. There is a solution.',
+                    'vs-before-flag': 'Without Flow Agent',
+                    'vs-before-quote': '"When I get in the morning, I already have 20 unanswered messages — half are clients who gave up."',
+                    'vs-after-flag': 'With Flow Agent',
+                    'vs-after-quote': '"The Agent responds as if it were me — personalized — schedules, confirms and even alerts me about clients who are disappearing."',
+                    // ── features ──
+                    'features-label': 'Agent Features',
+                    'features-title': 'Five automations that<br>transform your operation',
+                    'features-sub': 'Each pillar is an n8n flow configured and personalized for your niche — delivered ready to use, without you needing to touch any code.',
+                    'feat-1-title': 'Humanized 24/7 Service',
+                    'feat-1-desc': 'AI that converses in a personalized and natural way, never leaves a message unanswered and qualifies leads — even at 3am.',
+                    'feat-2-title': 'AI-Automated Scheduling',
+                    'feat-2-desc': 'Client requests, agent checks availability, confirms and registers — without any manual intervention from your team.',
+                    'feat-3-title': 'Automatic Relationship Sequence',
+                    'feat-3-desc': 'Confirmation, pre-appointment reminder, post-service survey and return follow-up — all on autopilot.',
+                    'feat-4-title': 'Intelligent Inactive Reactivation',
+                    'feat-4-desc': 'AI identifies clients gone for 30, 60 or 90 days and sends personalized messages with the right offer at the right time.',
+                    'feat-5-title': 'Conversations & Leads Report',
+                    'feat-5-desc': 'Conversation history, qualified leads and service status — so you can track the agent\'s performance.',
+                    // ── how ──
+                    'how-label': 'How It Works',
+                    'how-title': 'Delivered configured.<br>Active within 7 days.',
+                    'how-sub': 'You don\'t need to understand technology, n8n or AI. We take care of everything — you just need to sync your WhatsApp.',
+                    'how-1-title': 'Choose your plan',
+                    'how-1-desc': 'Select the ideal plan for your business. After payment confirmation, our team will reach out to begin the integration.',
+                    'how-2-title': 'Receive your Agent ready',
+                    'how-2-desc': 'We configure all n8n flows, the AI Agent and plan integrations. You receive everything working — zero manual setup.',
+                    'how-2-badge': 'Delivered in 7 days',
+                    'how-3-title': 'Activate via WhatsApp',
+                    'how-3-desc': 'Sync your WhatsApp Business with the Agent by scanning the QR Code or entering the code sent to your WhatsApp.',
+                    'how-3-badge': 'QR Code or code',
+                    'how-4-title': 'Connect your tools',
+                    'how-4-desc': 'Depending on the plan, provide access to your scheduling system or calendar APIs. We have a step-by-step guide or we do it for you.',
+                    'how-4-badge': 'Optional per plan',
+                    // ── insights ──
+                    'insights-label': 'Why AI Automation',
+                    'insights-title': 'Market data speaks<br>for itself',
+                    'insights-sub': 'Beauty and aesthetics businesses that adopt intelligent automation in their service reap expressive and consistent results.',
+                    'ins-1-cat': 'No-show Reduction',
+                    'ins-1-desc': 'Automatic and personalized reminders via WhatsApp significantly reduce client absence rates — and the losses that come with them. Clinics report results in the first month after implementation.',
+                    'ins-2-cat': 'More Lead Conversion',
+                    'ins-2-desc': 'Leads answered in less than 1 minute convert up to 65% more than services with hours of delay. AI never takes long — and that makes all the difference when the client is deciding where to go.',
+                    'ins-3-cat': 'In Recurring Revenue',
+                    'ins-3-desc': 'Businesses that implement automated communication, relationship sequences and inactive reactivation grow recurring revenue by up to 30% per year — without hiring more people for service.',
+                    'ins-callout-txt': 'of beauty and aesthetics clients prefer to schedule and ask questions via WhatsApp — not by phone, email or a dedicated app.',
+                    // ── faq ──
+                    'faq-label': 'FAQ',
+                    'faq-title': 'Frequently asked questions',
+                    'faq-1-q': 'What exactly is an AI Agent with n8n?',
+                    'faq-1-a': 'Flow Agent is an intelligent automation system built on the n8n platform — one of the most powerful automation tools on the market. It combines automated flows with artificial intelligence to create a "virtual attendant" that converses in a humanized and personalized way via WhatsApp, schedules appointments, sends confirmations, nurtures clients and reactivates inactive ones. All configured specifically for your niche, without manual intervention.',
+                    'faq-2-q': 'Do I need technical knowledge to use it?',
+                    'faq-2-a': 'No. Flow Agent is delivered fully configured by our team. You don\'t need to understand n8n, AI, code or integration. Your only responsibility is to sync WhatsApp Business with the Agent — which is done via QR Code or a code sent directly to your WhatsApp, in less than 5 minutes.',
+                    'faq-3-q': 'How long does it take for the Agent to go live?',
+                    'faq-3-a': 'After payment confirmation, our team configures and delivers your AI Agent within 7 days. The timeline may vary depending on the complexity of the chosen plan and integrations needed. After delivery, the WhatsApp sync process takes less than 5 minutes.',
+                    'faq-4-q': 'Does the agent\'s service feel robotic or is it humanized?',
+                    'faq-4-a': 'Flow Agent is configured to communicate in a humanized way with your niche\'s language — using your brand\'s tone of voice, with personalized greetings, emojis in the right context and responses that feel written by a real attendant. The average response time is ~15 seconds, which contributes to the naturalness of the conversation.',
+                    'faq-5-q': 'Can I use it with my existing WhatsApp Business?',
+                    'faq-5-a': 'Yes. Flow Agent connects to your current WhatsApp Business number via QR Code or activation code. There is no need to change numbers or create a new account. The process is simple and preserves your existing conversations and contacts.',
+                    'faq-6-q': 'Can I cancel anytime? Is there commitment or penalty?',
+                    'faq-6-a': 'Yes, you can cancel at any time without penalty or fee. We believe you will stay because the Agent delivers results — not because you are locked in. In case of cancellation, you receive access to all your conversation and contact data for export within 24 hours.',
+                    // ── mobile nav ──
+                    'mn-cta-plans': 'View plans & pricing',
+                }
+            };
+
+
+            // ── Pricing: fixed prices per lang + billing cycle ────────
+            var PLAN_PRICES = {
+                PT: {
+                    monthly: { starter: { curr: 'R$', amt: '147' }, pro: { curr: 'R$', amt: '297' }, ent: { curr: 'R$', amt: '497' } },
+                    annual: { starter: { curr: 'R$', amt: '118' }, pro: { curr: 'R$', amt: '238' }, ent: { curr: 'R$', amt: '398' } }
+                },
+                EN: {
+                    monthly: { starter: { curr: 'US$', amt: '97' }, pro: { curr: 'US$', amt: '197' }, ent: { curr: 'US$', amt: '397' } },
+                    annual: { starter: { curr: 'US$', amt: '78' }, pro: { curr: 'US$', amt: '158' }, ent: { curr: 'US$', amt: '318' } }
+                }
+            };
+            var PLAN_OPT_LABELS = {
+                PT: {
+                    monthly: { starter: 'Essencial — R$ 147/mês', pro: 'Profissional — R$ 297/mês', ent: 'Exclusivo — R$ 497/mês' },
+                    annual: { starter: 'Essencial — R$ 118/mês', pro: 'Profissional — R$ 238/mês', ent: 'Exclusivo — R$ 398/mês' }
+                },
+                EN: {
+                    monthly: { starter: 'Essential — US$ 97/mo', pro: 'Professional — US$ 197/mo', ent: 'Exclusive — US$ 397/mo' },
+                    annual: { starter: 'Essential — US$ 78/mo', pro: 'Professional — US$ 158/mo', ent: 'Exclusive — US$ 318/mo' }
+                }
+            };
+            var _currentLang = 'PT';
+            var _currentCycle = 'monthly';
+
+            function applyPrices() {
+                var p = PLAN_PRICES[_currentLang][_currentCycle];
+                var o = PLAN_OPT_LABELS[_currentLang][_currentCycle];
+                ['starter', 'pro', 'ent'].forEach(function (plan) {
+                    var c = document.getElementById('curr-' + plan);
+                    var a = document.getElementById('amt-' + plan);
+                    if (c) c.textContent = p[plan].curr;
+                    if (a) a.textContent = p[plan].amt;
+                    var opt = document.getElementById('opt-' + plan);
+                    if (opt) opt.textContent = o[plan];
+                });
+                var isAnnual = _currentCycle === 'annual';
+                var lang = _currentLang;
+                var periodLabel = isAnnual
+                    ? (lang === 'PT' ? 'por mês · cobrado anualmente · 20% off' : 'per month · billed annually · 20% off')
+                    : (lang === 'PT' ? 'por mês · cobrado mensalmente' : 'per month · billed monthly');
+                document.querySelectorAll('[data-i18n="plan-starter-period"],[data-i18n="plan-pro-period"],[data-i18n="plan-ent-period"]').forEach(function (el) {
+                    el.textContent = periodLabel;
+                });
+                var saveBadge = document.getElementById('billing-save-badge');
+                if (saveBadge) {
+                    // Use class instead of inline style so CSS media queries can override
+                    saveBadge.classList.toggle('is-visible', isAnnual);
+                }
+                var monthBtn = document.getElementById('bill-monthly');
+                var yearBtn = document.getElementById('bill-annual');
+                if (monthBtn) monthBtn.classList.toggle('active', !isAnnual);
+                if (yearBtn) yearBtn.classList.toggle('active', isAnnual);
+            }
+
+            window.setBillingCycle = function (cycle) {
+                _currentCycle = cycle;
+                applyPrices();
+            };
+
+            window.setLang = function (lang, btn) {
+                // Sync ALL lang buttons across header, footer, mobile nav
+                document.querySelectorAll('.lang-btn').forEach(function (b) {
+                    var isMatch = b.textContent.trim() === lang;
+                    b.classList.toggle('active', isMatch);
+                    b.setAttribute('aria-pressed', isMatch ? 'true' : 'false');
+                });
+
+                var t = i18n[lang];
+                if (!t) return;
+
+                // Nav links (header + mobile)
+                document.querySelectorAll('[data-i18n]').forEach(function (el) {
+                    var key = el.getAttribute('data-i18n');
+                    if (t[key] !== undefined) {
+                        if (el.tagName === 'INPUT' || el.tagName === 'SELECT') {
+                            el.placeholder = t[key];
+                        } else {
+                            el.innerHTML = t[key];
+                        }
+                    }
+                });
+
+                // Select placeholder options
+                document.querySelectorAll('[data-i18n-opt]').forEach(function (el) {
+                    var key = el.getAttribute('data-i18n-opt');
+                    if (t[key] !== undefined) el.textContent = t[key];
+                });
+
+                // Update html lang attribute
+                document.documentElement.lang = lang === 'PT' ? 'pt-BR' : 'en';
+                // Apply prices for new lang
+                _currentLang = lang;
+                applyPrices();
+
+                // ── Switch select option labels ────────────────────────────
+                var optIds = [
+                    'opt-tipo-0', 'opt-tipo-1', 'opt-tipo-2', 'opt-tipo-3', 'opt-tipo-4', 'opt-tipo-5',
+                    'opt-pais-0', 'opt-pais-1', 'opt-pais-2', 'opt-pais-3',
+                    'opt-plano-ainda', 'opt-plano-0'
+                ];
+                optIds.forEach(function (id) {
+                    var el = document.getElementById(id);
+                    if (el && t[id] !== undefined) el.textContent = t[id];
+                });
+
+                // ── Switch WhatsApp link message per language ──────────────
+                var waUrls = { PT: 'https://wa.me/5531994536050?text=Ol%C3%A1%21%20Quero%20ver%20como%20a%20IA%20de%20atendimento%20funciona%20e%20entender%20como%20ela%20pode%20automatizar%20os%20agendamentos%20do%20meu%20neg%C3%B3cio.', EN: 'https://wa.me/5531994536050?text=Hi%21%20I%27d%20like%20to%20see%20how%20the%20AI%20assistant%20works%20and%20understand%20how%20it%20can%20automate%20scheduling%20for%20my%20business.' };
+                ['wa-link-1', 'wa-link-2'].forEach(function (id) {
+                    var el = document.getElementById(id);
+                    if (el) el.href = waUrls[lang];
+                });
+
+                // ── Switch input placeholders ───────────────────────────────
+                // WhatsApp: switch between BR and US format
+                var wpInput = document.getElementById('whatsapp');
+                if (wpInput) {
+                    wpInput.placeholder = lang === 'EN'
+                        ? wpInput.getAttribute('data-placeholder-en')
+                        : wpInput.getAttribute('data-placeholder-pt');
+                }
+                // Other placeholders via data-ph attribute
+                document.querySelectorAll('[data-ph]').forEach(function (el) {
+                    var key = el.getAttribute('data-ph');
+                    if (t[key] !== undefined) el.placeholder = t[key];
+                });
+            };
+
+            // Smooth scroll for all anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+                a.addEventListener('click', function (e) {
+                    var t = document.querySelector(this.getAttribute('href'));
+                    if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+                });
+            });
+
+            // Init prices on load
+            applyPrices();
+
+        })();
+    </script>
 </body>
 
 </html>
